@@ -3,7 +3,8 @@ James-Zeyu-Li/James-Zeyu-Li is a ✨ special ✨ repository because its `README.
 You can click the Preview link to take a look at your changes.
 --->
 
-# 👋 Hi, I'm Zeyu (James) Li, an MS Computer Science Student interested in learning more about Backend Software development, Computer Systems, and Distributed Systems.
+# 👋 Hi, I'm Zeyu (James) Li
+- I am an MS Computer Science Student interested in learning more about Backend Software development, Computer Systems, and Distributed Systems.
 
 ## 💻 Technical Skills
 - **Languages**: Java, Python, Golang, C++, C, SQL
