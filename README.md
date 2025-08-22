@@ -13,4 +13,8 @@ You can click the Preview link to take a look at your changes.
 
 ## Recent Projects & Tech
 <!--TECH-STACK:START-->
+| Project | Tech |
+|---|---|
+| [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | AWS · Java · MySQL · RabbitMQ |
+| [VirtualMemorySimulator](https://github.com/James-Zeyu-Li/VirtualMemorySimulator) | C++ |
 <!--TECH-STACK:END-->
