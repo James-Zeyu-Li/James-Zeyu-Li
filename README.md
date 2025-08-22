@@ -15,6 +15,12 @@ You can click the Preview link to take a look at your changes.
 <!--TECH-STACK:START-->
 | Project | Tech |
 |---|---|
+| [CS6650_2025_TA](https://github.com/James-Zeyu-Li/CS6650_2025_TA) | Go |
+| [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | AWS · DynamoDB · Java · MySQL · RabbitMQ · Redis |
+| [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Nginx · Python · gRPC |
+| [LocalSimulationKG](https://github.com/James-Zeyu-Li/LocalSimulationKG) | AWS · Python · Terraform |
+| [CS6650_scalable_distributed](https://github.com/James-Zeyu-Li/CS6650_scalable_distributed) | HTML |
 | [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | AWS · Java · MySQL · RabbitMQ |
+| [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | C++ |
 | [VirtualMemorySimulator](https://github.com/James-Zeyu-Li/VirtualMemorySimulator) | C++ |
 <!--TECH-STACK:END-->
