@@ -5,6 +5,9 @@ You can click the Preview link to take a look at your changes.
 
 # 👋 Hi, I'm Zeyu (James) Li
 - I am an MS Computer Science Student interested in learning more about Backend Software development, Computer Systems, and Distributed Systems.
+- Please feel free to check out 
+  - Profolio Website: https://zeyujames.vercel.app/
+  - LinkedIn: www.linkedin.com/in/zeyujames
 
 ## 💻 Technical Skills
 - **Languages**: Java, Python, Golang, C++, C, SQL
@@ -27,7 +30,7 @@ You can click the Preview link to take a look at your changes.
 
 ## Tech Summary
 <!--TECH-OVERALL:START-->
-Languages (by bytes across selected repos)
+Languages (by bytes across repos)
 
 | Language | Share |
 |---|---:|
@@ -38,7 +41,7 @@ Languages (by bytes across selected repos)
 | Go |   4.3% █░░░░░░░░░░░ |
 | Terraform (HCL) |   2.5% ░░░░░░░░░░░░ |
 
-Tech adoption (share of selected repos)
+Tech adoption (share of repos)
 
 | Tech | Adoption |
 |---|---:|
