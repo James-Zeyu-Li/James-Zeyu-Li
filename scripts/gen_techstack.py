@@ -1,59 +1,64 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import os
 import re
 import base64
 import requests
-from typing import Iterable, List, Dict, Set, Optional
+import math
+import time
+from typing import List, Dict, Set, Optional
+from collections import defaultdict, Counter
 
-# ======= 配置（可被 README 注释与环境变量覆盖） =======
-# 改成你的 GitHub 用户名，或用 Actions 环境变量覆盖
-USER = os.getenv("PROFILE_USERNAME", "zeyuli")
-MAX_ROWS = int(os.getenv("MAX_PROJECT_ROWS", "10"))
+USER = os.getenv("PROFILE_USERNAME", "James-Zeyu-Li")  # 你的 GitHub 用户名
+READ_TOKEN = os.getenv("GITHUB_TOKEN") or os.getenv(
+    "GH_TOKEN") or ""  # 可选，提升 API 配额
+TIMEOUT = 30
 
-# 代码内默认白/黑名单（可留空，用 README/ENV 覆盖）
-INCLUDE_REPOS_DEFAULT: Set[str] = {
+# ---- 只读白名单 ----
+INCLUDE_REPOS: Set[str] = {
     "CS6650_2025_TA", "profolio_website", "High-Concurrency-CQRS-Ticketing-Platform",
     "CedarArbutusCode", "LocalSimulationKG", "CS6650_scalable_distributed",
     "DistributedAlbumStorage", "VirtualMemorySimulator", "ConcurrencyTesting"
 }
-EXCLUDE_REPOS_DEFAULT: Set[str] = set()
 
-API_LIST = f"https://api.github.com/users/{USER}/repos?per_page=100&sort=updated&direction=desc"
+# README 占位符
+STACK_START, STACK_END = "<!--TECH-STACK:START-->", "<!--TECH-STACK:END-->"
+SUM_START,   SUM_END = "<!--TECH-SUMMARY:START-->", "<!--TECH-SUMMARY:END-->"
+README_PATH = "README.md"
+
+GITHUB = "https://api.github.com"
 HEAD = {
-    # GITHUB_TOKEN 在 GitHub Actions 内置；本地跑可以注释掉 Authorization
-    **({"Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}"} if os.getenv("GITHUB_TOKEN") else {}),
-    "X-GitHub-Api-Version": "2022-11-28",
     "Accept": "application/vnd.github+json",
-    "User-Agent": f"{USER}-profile-techstack-script"
+    "X-GitHub-Api-Version": "2022-11-28",
+    "User-Agent": f"{USER}-techstack-aggregator"
 }
+if READ_TOKEN:
+    HEAD["Authorization"] = f"Bearer {READ_TOKEN}"
 
-# ======= HTTP/Tools =======
+sess = requests.Session()
+sess.headers.update(HEAD)
 
 
-def fetch_all(url: str) -> List[dict]:
-    """支持 Link 分页抓取所有结果。"""
-    out, next_url = [], url
-    sess = requests.Session()
-    while next_url:
-        r = sess.get(next_url, headers=HEAD, timeout=30)
+def fetch_all_repos(username: str) -> List[Dict]:
+    """列出所有 owner 仓库，分页处理。"""
+    out, page = [], 1
+    while True:
+        url = f"{GITHUB}/users/{username}/repos?type=owner&sort=updated&per_page=100&page={page}"
+        r = sess.get(url, timeout=TIMEOUT)
         r.raise_for_status()
-        out.extend(r.json())
-        # 解析 Link 头
-        link = r.headers.get("Link", "")
-        m = re.search(r'<([^>]+)>;\s*rel="next"', link)
-        next_url = m.group(1) if m else None
+        arr = r.json()
+        if not arr:
+            break
+        out.extend(arr)
+        page += 1
+        time.sleep(0.15)
     return out
 
 
-def fetch_json(url: str) -> dict:
-    r = requests.get(url, headers=HEAD, timeout=30)
-    r.raise_for_status()
-    return r.json()
-
-
-def get_file(repo_full: str, path: str) -> Optional[str]:
-    url = f"https://api.github.com/repos/{repo_full}/contents/{path}"
-    r = requests.get(url, headers=HEAD, timeout=15)
+def get_file(full: str, path: str) -> Optional[str]:
+    url = f"{GITHUB}/repos/{full}/contents/{path}"
+    r = sess.get(url, timeout=15)
     if r.status_code != 200:
         return None
     data = r.json()
@@ -62,33 +67,32 @@ def get_file(repo_full: str, path: str) -> Optional[str]:
     return None
 
 
-# ======= README 解析 =======
-README_PATH = "README.md"
-INCLUDE_DIRECTIVE = r"<!--TECH-STACK:INCLUDE=([^>]+)-->"
-EXCLUDE_DIRECTIVE = r"<!--TECH-STACK:EXCLUDE=([^>]+)-->"
+def get_languages_bytes(full: str) -> Dict[str, int]:
+    """按语言字节数统计（官方口径）。"""
+    url = f"{GITHUB}/repos/{full}/languages"
+    r = sess.get(url, timeout=TIMEOUT)
+    if r.status_code == 200:
+        return r.json() or {}
+    return {}
 
 
-def parse_list_directive(txt: str, pattern: str) -> Set[str]:
-    m = re.search(pattern, txt, flags=re.I)
-    if not m:
-        return set()
-    # 允许空格，去重
-    return {x.strip() for x in m.group(1).split(",") if x.strip()}
+TECH_KWS = [
+    (r'\bredis\b', "Redis"),
+    (r'\brabbitmq\b', "RabbitMQ"),
+    (r'\b(dynamodb|aws dynamodb)\b', "DynamoDB"),
+    (r'\bpostgres(ql)?\b', "PostgreSQL"),
+    (r'\bmysql\b', "MySQL"),
+    (r'\bmongodb\b', "MongoDB"),
+    (r'\baws\b', "AWS"),
+    (r'\bterraform\b', "Terraform"),
+    (r'\bkubernetes|k8s\b', "Kubernetes"),
+    (r'\bnginx\b', "Nginx"),
+    (r'\bgrpc\b', "gRPC"),
+]
 
 
-def load_readme_controls() -> (Set[str], Set[str]):
-    try:
-        with open(README_PATH, "r", encoding="utf-8") as f:
-            txt = f.read()
-    except FileNotFoundError:
-        return set(), set()
-    return parse_list_directive(txt, INCLUDE_DIRECTIVE), parse_list_directive(txt, EXCLUDE_DIRECTIVE)
-
-# ======= 技术栈识别 =======
-
-
-def detect_stack(repo: dict) -> List[str]:
-    repo_full = repo["full_name"]
+def detect_repo_tech(repo_full: str) -> List[str]:
+    """从常见文件/README 中识别技术标签（presence-based）。"""
     files = {
         "go.mod": get_file(repo_full, "go.mod"),
         "pom.xml": get_file(repo_full, "pom.xml"),
@@ -97,35 +101,28 @@ def detect_stack(repo: dict) -> List[str]:
         "requirements.txt": get_file(repo_full, "requirements.txt"),
         "Dockerfile": get_file(repo_full, "Dockerfile"),
     }
-    tech: Set[str] = set()
-    lang = repo.get("language")
-    if lang:
-        tech.add(lang)
-
+    tech = set()
+    # 语言/框架线索
     if files["go.mod"]:
         tech.add("Go")
         if re.search(r'\bgin-gonic/gin\b', files["go.mod"]):
             tech.add("Gin")
-
     if files["pom.xml"] or files["build.gradle"]:
         tech.update(["Java", "Spring Boot"])
-        if files["pom.xml"] and "spring-boot-starter-web" in files["pom.xml"]:
+        if files["pom.xml"] and "spring-boot-starter-web" in (files["pom.xml"] or ""):
             tech.add("REST")
-
     if files["package.json"]:
         tech.update(["Node.js", "NPM"])
         if re.search(r'"next"\s*:', files["package.json"]):
             tech.add("Next.js")
         if re.search(r'"react"\s*:', files["package.json"]):
             tech.add("React")
-
     if files["requirements.txt"]:
         tech.add("Python")
         if re.search(r'\bfastapi\b', files["requirements.txt"]):
             tech.add("FastAPI")
         if re.search(r'\bflask\b', files["requirements.txt"]):
             tech.add("Flask")
-
     if files["Dockerfile"]:
         tech.add("Docker")
         if re.search(r'FROM\s+nginx', files["Dockerfile"], re.I):
@@ -133,108 +130,114 @@ def detect_stack(repo: dict) -> List[str]:
 
     readme = get_file(repo_full, "README.md") or ""
     blob = " ".join((readme, *(files[k] or "" for k in files)))
-    for kw, label in [
-        (r'\bredis\b', "Redis"),
-        (r'\brabbitmq\b', "RabbitMQ"),
-        (r'\b(dynamodb|aws dynamodb)\b', "DynamoDB"),
-        (r'\bpostgres(ql)?\b', "PostgreSQL"),
-        (r'\bmysql\b', "MySQL"),
-        (r'\bmongodb\b', "MongoDB"),
-        (r'\baws\b', "AWS"),
-        (r'\bterraform\b', "Terraform"),
-        (r'\bkubernetes|k8s\b', "Kubernetes"),
-        (r'\bnginx\b', "Nginx"),
-        (r'\bgrpc\b', "gRPC"),
-    ]:
+    for kw, label in TECH_KWS:
         if re.search(kw, blob, re.I):
             tech.add(label)
 
     return sorted(tech)
-
-# ======= 渲染 & 写回 =======
 
 
 def escape_pipes(s: str) -> str:
     return s.replace("|", r"\|")
 
 
-def build_table(rows: List[Dict[str, str]]) -> str:
+def build_project_table(rows: List[Dict]) -> str:
     header = "| Project | Tech |\n|---|---|\n"
-    lines = []
-    for r in rows:
-        name = escape_pipes(r["name"])
-        url = r["html_url"]
-        techs = " · ".join(r["tech"]) if r["tech"] else "-"
-        lines.append(f"| [{name}]({url}) | {techs} |")
-    return header + "\n".join(lines)
+    body = "\n".join(f"| [{escape_pipes(r['name'])}]({r['url']}) | {' · '.join(r['tech']) if r['tech'] else '-'} |"
+                     for r in rows)
+    return header + body
 
 
-START_TAG = "<!--TECH-STACK:START-->"
-END_TAG = "<!--TECH-STACK:END-->"
+def fmt_pct(n: int, d: int) -> str:
+    if d <= 0:
+        return "0%"
+    return f"{(n*100.0/d):.1f}%"
 
 
-def update_readme(table: str) -> None:
+def build_summary_tables(lang_bytes_total: Dict[str, int], tech_presence: Dict[str, int], repo_count: int) -> str:
+    # A. Languages by bytes
+    lang_rows = sorted(lang_bytes_total.items(),
+                       key=lambda kv: kv[1], reverse=True)
+    lang_sum = sum(v for _, v in lang_rows) or 1
+    lang_md = "| Language | Share |\n|---|---|\n" + "\n".join(
+        f"| {escape_pipes(k)} | {v*100.0/lang_sum:.1f}% |" for k, v in lang_rows
+    )
+
+    # B. Tech adoption (% repos that contain该技术)
+    tech_rows = sorted(tech_presence.items(),
+                       key=lambda kv: kv[1], reverse=True)
+    tech_md = "| Tech | Adoption |\n|---|---|\n" + "\n".join(
+        f"| {escape_pipes(k)} | {fmt_pct(v, repo_count)} |" for k, v in tech_rows
+    )
+
+    return (
+        "### Overall Tech Usage\n\n"
+        "**Languages (by bytes across selected repos)**\n\n" + lang_md +
+        "\n\n**Tech adoption (share of repos using the tech)**\n\n" +
+        tech_md + "\n"
+    )
+
+
+def update_readme(stack_table: str, summary_block: str):
     with open(README_PATH, "r+", encoding="utf-8") as f:
         txt = f.read()
-        block = f"{START_TAG}\n{table}\n{END_TAG}"
-        if START_TAG in txt and END_TAG in txt:
-            txt = re.sub(
-                f"{re.escape(START_TAG)}.*?{re.escape(END_TAG)}", block, txt, flags=re.S)
+
+        stack_block = f"{STACK_START}\n{stack_table}\n{STACK_END}"
+        if STACK_START in txt and STACK_END in txt:
+            txt = re.sub(re.escape(STACK_START) + r".*?" + re.escape(STACK_END),
+                         stack_block, txt, flags=re.S)
         else:
-            txt += f"\n\n## Recent Projects & Tech\n{block}\n"
+            txt += f"\n\n## Recent Projects & Tech\n{stack_block}\n"
+
+        sum_block = f"{SUM_START}\n{summary_block}\n{SUM_END}"
+        if SUM_START in txt and SUM_END in txt:
+            txt = re.sub(re.escape(SUM_START) + r".*?" + re.escape(SUM_END),
+                         sum_block, txt, flags=re.S)
+        else:
+            txt += f"\n\n## Tech Summary\n{sum_block}\n"
+
         f.seek(0)
         f.write(txt)
         f.truncate()
 
-# ======= 主流程 =======
 
-
-def effective_sets() -> (Set[str], Set[str]):
-    # 从 README 注释获取
-    inc_rd, exc_rd = load_readme_controls()
-
-    # 从环境变量获取（逗号分隔）
-    inc_env = {x.strip() for x in os.getenv(
-        "TECHSTACK_INCLUDE", "").split(",") if x.strip()}
-    exc_env = {x.strip() for x in os.getenv(
-        "TECHSTACK_EXCLUDE", "").split(",") if x.strip()}
-
-    include = inc_rd or inc_env or INCLUDE_REPOS_DEFAULT
-    exclude = exc_rd or exc_env or EXCLUDE_REPOS_DEFAULT
-    return include, exclude
-
-
-def main() -> None:
-    include, exclude = effective_sets()
-
-    repos = fetch_all(API_LIST)
-    # 过滤：非 fork、非私有、非归档/禁用/模板
-    repos = [
-        r for r in repos
-        if not r.get("fork", False)
+def main():
+    all_repos = fetch_all_repos(USER)
+    selected = [
+        r for r in all_repos
+        if (r["name"] in INCLUDE_REPOS)
+        and not r.get("fork", False)
         and not r.get("private", False)
         and not r.get("archived", False)
         and not r.get("disabled", False)
         and not r.get("is_template", False)
     ]
 
-    # 白名单优先：若 include 非空，仅取其交集；否则视为“全量-黑名单”
-    if include:
-        repos = [r for r in repos if r["name"] in include]
-    if exclude:
-        repos = [r for r in repos if r["name"] not in exclude]
-
-    # 取前 MAX_ROWS 个
     rows = []
-    for r in repos[:MAX_ROWS]:
-        rows.append({
-            "name": r["name"],
-            "html_url": r["html_url"],
-            "tech": detect_stack(r)
-        })
+    tech_presence: Dict[str, int] = Counter()
+    lang_bytes_total: Dict[str, int] = Counter()
 
-    update_readme(build_table(rows))
+    for r in selected:
+        full = r["full_name"]
+        techs = detect_repo_tech(full)
+        rows.append({"name": r["name"], "url": r["html_url"], "tech": techs})
+
+        # languages bytes
+        lang_bytes = get_languages_bytes(full)
+        for k, v in lang_bytes.items():
+            lang_bytes_total[k] += int(v)
+
+        # tech presence (按仓库出现与否)
+        for t in set(techs):
+            tech_presence[t] += 1
+
+    # 生成表格
+    stack_table = build_project_table(rows)
+    summary_md = build_summary_tables(
+        lang_bytes_total, tech_presence, len(selected))
+    update_readme(stack_table, summary_md)
 
 
 if __name__ == "__main__":
+    import re
     main()

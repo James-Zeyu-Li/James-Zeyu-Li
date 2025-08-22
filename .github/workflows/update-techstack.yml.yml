@@ -1,17 +1,14 @@
 name: Update Tech Stack
 on:
-  schedule: [{ cron: "0 9 * * 1,4" }]  # 每周一、四 09:00 UTC
-  workflow_dispatch:
+  push:
+    branches: [ "main" ]     # 只在你的默认分支 push 时触发
+  workflow_dispatch:          # 允许手动运行
 
 permissions:
   contents: write
 
 env:
-  PROFILE_USERNAME: James-Zeyu-Li              # ← 你的 GitHub 用户名
-  MAX_PROJECT_ROWS: "10"
-  # 可选：在这里就能配置白/黑名单（也可以用 README 注释控制）
-  TECHSTACK_INCLUDE: "CS6650_2025_TA,profolio_website,High-Concurrency-CQRS-Ticketing-Platform,CedarArbutusCode,LocalSimulationKG,CS6650_scalable_distributed,DistributedAlbumStorage,VirtualMemorySimulator,ConcurrencyTesting"
-  TECHSTACK_EXCLUDE: ""
+  PROFILE_USERNAME: James-Zeyu-Li
 
 jobs:
   build:
@@ -26,7 +23,10 @@ jobs:
       - name: Install deps
         run: pip install requests
 
-      - name: Generate table
+      - name: Generate tech tables
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # 可选，不设也能跑（配额低一些）
+          PROFILE_USERNAME: ${{ env.PROFILE_USERNAME }}
         run: python scripts/gen_techstack.py
 
       - name: Commit changes
@@ -35,6 +35,6 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add README.md
-            git commit -m "chore: auto-update tech stack"
+            git commit -m "chore: update tech stack & summary"
             git push
           fi
