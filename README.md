@@ -12,5 +12,5 @@ You can click the Preview link to take a look at your changes.
 - **Cloud & Web**: AWS EC2, AWS RDS, gRPC, RabbitMQ, Apache Kafka, Java Servlet, Flask, Go Gin, Nginx
 
 ## Recent Projects & Tech
-<!--TECH-STACK:START-->
-<!--TECH-STACK:END-->
+<!--TECH-STACK:INCLUDE=ticketing-platform,VirtualMemorySimulator,DistributedAlbumStorage-->
+<!--TECH-STACK:EXCLUDE=old-repo,tests,playground-->
