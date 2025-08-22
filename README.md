@@ -12,14 +12,14 @@ You can click the Preview link to take a look at your changes.
 - **Cloud & Web**: AWS EC2, AWS RDS, gRPC, RabbitMQ, Apache Kafka, Java Servlet, Flask, Go Gin, Nginx
 
 
-## Recent Projects & Tech
-<!--TECH-STACK:START-->
-<!--TECH-STACK:END-->
+## Recent Projects (Tech × Code Mix)
+<!--TECH-PROJECTS:START-->
+<!--TECH-PROJECTS:END-->
 
-## Tech Summary
-<!--TECH-SUMMARY:START-->
-<!--TECH-SUMMARY:END-->
+## Overall Usage
+<!--TECH-OVERALL:START-->
+<!--TECH-OVERALL:END-->
 
-## Project Code Share
+## Project Code Size Share
 <!--TECH-PROJECT-SHARE:START-->
 <!--TECH-PROJECT-SHARE:END-->

@@ -1,6 +1,6 @@
 name: Update Tech Stack
 on:
-  workflow_dispatch:          # 只有手动 Run 才会触发
+  workflow_dispatch:   # 仅手动 Run
 
 permissions:
   contents: write
@@ -13,26 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
+        with: { python-version: '3.11' }
       - name: Install deps
         run: pip install requests
-
-      - name: Generate tech tables
+      - name: Generate
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # 默认就有；用于提升 API 配额
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # 建议保留，提高配额
           PROFILE_USERNAME: ${{ env.PROFILE_USERNAME }}
         run: python scripts/gen_techstack.py
-
-      - name: Commit changes
+      - name: Commit
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add README.md
-            git commit -m "chore: update tech stack & summary"
+            git commit -m "chore: refresh tech metrics"
             git push
           fi
