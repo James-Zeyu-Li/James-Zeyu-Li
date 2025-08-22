@@ -1,20 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+Generate compact tech tables into README:
+- Recent Projects (Tech × Code mix)
+- Tech Summary (Languages overall + Tech adoption)
+Design notes:
+- Manual run only (workflow_dispatch)
+- Whitelist repositories; render in the given order
+- Tech override for certain repos (e.g., "Computer Systems")
+- Language alias: HCL -> Terraform (HCL)
+- Idempotent: overwrite content between START/END markers
+"""
+
 import os
 import re
 import base64
-import requests
 import time
 from typing import List, Dict, Optional
 from collections import Counter
 
-# ===== 基本配置 =====
-USER = os.getenv("PROFILE_USERNAME", "James-Zeyu-Li")
-TOKEN = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or ""
+import requests
+
+# ===== Basic config =====
+USER: str = os.getenv("PROFILE_USERNAME", "James-Zeyu-Li")
+TOKEN: str = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or ""
 TIMEOUT = 30
 
-# 白名单（按此顺序渲染；名称需与仓库精确匹配）
+# --- Language alias (GitHub /languages returns "HCL" for .tf) ---
+HCL_LABEL = "Terraform (HCL)"
+LANG_ALIAS: Dict[str, str] = {
+    "HCL": HCL_LABEL,
+}
+
+
+def normalize_langs(lang_bytes: Dict[str, int]) -> Dict[str, int]:
+    """Alias & merge language bytes (e.g., HCL -> Terraform (HCL))."""
+    out: Counter = Counter()
+    for k, v in (lang_bytes or {}).items():
+        out[LANG_ALIAS.get(k, k)] += int(v)
+    return dict(out)
+
+
+# ===== Whitelist (render in this order) =====
 INCLUDE_REPOS: List[str] = [
     "CS6650_2025_TA",
     "High-Concurrency-CQRS-Ticketing-Platform",
@@ -23,22 +51,31 @@ INCLUDE_REPOS: List[str] = [
     "DistributedAlbumStorage",
     "ConcurrencyTesting",
     "VirtualMemorySimulator",
-    # "profolio_website", "CS6650_scalable_distributed" 如需展示可解注
+    # "profolio_website",
+    # "CS6650_scalable_distributed",
 ]
 
-# README 占位（仅两块）
+# ===== Tech override by repo (exact name match) =====
+# NOTE: override means "replace" (not union). To append instead:
+# techs = sorted(set(detect_tech(full)) | set(TECH_OVERRIDE.get(name, [])))
+TECH_OVERRIDE: Dict[str, List[str]] = {
+    "ConcurrencyTesting": ["Computer Systems"],
+    "VirtualMemorySimulator": ["Computer Systems"],
+}
+
+# ===== README anchors (two blocks only) =====
 PJT_START, PJT_END = "<!--TECH-PROJECTS:START-->", "<!--TECH-PROJECTS:END-->"
 OVR_START, OVR_END = "<!--TECH-OVERALL:START-->", "<!--TECH-OVERALL:END-->"
 README = "README.md"
 
-# 展示参数
+# ===== Rendering params =====
 TOP_LANGS = 6
 TOP_TECHS = 10
 BAR_W_PROJECT = 10
 BAR_W_OVERALL = 12
 TECH_PER_ROW = 5
 
-# ===== HTTP 基元 =====
+# ===== HTTP =====
 GITHUB = "https://api.github.com"
 HEAD = {
     "Accept": "application/vnd.github+json",
@@ -50,9 +87,11 @@ if TOKEN:
 sess = requests.Session()
 sess.headers.update(HEAD)
 
+# ---------- HTTP helpers ----------
+
 
 def list_owner_repos(user: str) -> Dict[str, dict]:
-    """返回 {repo_name: repo_obj}，仅 owner 仓库。"""
+    """Return {repo_name: repo_obj} for owner's repositories (filtered)."""
     out, page = [], 1
     while True:
         url = f"{GITHUB}/users/{user}/repos?type=owner&sort=updated&per_page=100&page={page}"
@@ -64,8 +103,7 @@ def list_owner_repos(user: str) -> Dict[str, dict]:
         out.extend(arr)
         page += 1
         time.sleep(0.1)
-    # 过滤在这里做，后面可按白名单顺序索引
-    keep = {}
+    keep: Dict[str, dict] = {}
     for r in out:
         if r.get("fork") or r.get("private") or r.get("archived") or r.get("disabled") or r.get("is_template"):
             continue
@@ -88,7 +126,7 @@ def get_languages(full: str) -> Dict[str, int]:
     return r.json() if r.status_code == 200 else {}
 
 
-# ===== Tech 识别 =====
+# ---------- Tech detection ----------
 KWS = [
     (r'\bredis\b', "Redis"), (r'\brabbitmq\b', "RabbitMQ"), (r'\bkafka\b', "Kafka"),
     (r'\b(dynamodb|aws dynamodb)\b', "DynamoDB"), (r'\bpostgres(ql)?\b', "PostgreSQL"),
@@ -128,13 +166,13 @@ def detect_tech(full: str) -> List[str]:
             tech.add(label)
     return sorted(tech)
 
-# ===== 渲染 =====
+# ---------- Rendering ----------
 
 
 def bar(pct: float, width: int) -> str:
     pct = max(0.0, min(100.0, pct))
-    filled = round(pct/100.0*width)
-    return "█"*filled + "░"*(width - filled)
+    filled = round(pct / 100.0 * width)
+    return "█" * filled + "░" * (width - filled)
 
 
 def escape(s: str) -> str:
@@ -144,7 +182,7 @@ def escape(s: str) -> str:
 def shorten(techs: List[str], limit: int) -> str:
     if len(techs) <= limit:
         return " · ".join(techs)
-    return " · ".join(techs[:limit]) + f" · +{len(techs)-limit}"
+    return " · ".join(techs[:limit]) + f" · +{len(techs) - limit}"
 
 
 def render_code_mix(lang_bytes: Dict[str, int], top: int = 2) -> str:
@@ -153,7 +191,7 @@ def render_code_mix(lang_bytes: Dict[str, int], top: int = 2) -> str:
                        key=lambda kv: kv[1], reverse=True)[:top]
     if not top_items:
         return "-"
-    parts = []
+    parts: List[str] = []
     for name, v in top_items:
         pct = v * 100.0 / total
         parts.append(f"{name} {pct:>4.1f}% {bar(pct, BAR_W_PROJECT)}")
@@ -177,44 +215,54 @@ def md_overall(lang_total: Dict[str, int], tech_presence: Dict[str, int], repo_c
         :TOP_LANGS]
     lang_sum = sum(lang_total.values()) or 1
     lang_md = "| Language | Share |\n|---|---:|\n" + "\n".join(
-        f"| {escape(k)} | {v*100.0/lang_sum:5.1f}% {bar(v*100.0/lang_sum, BAR_W_OVERALL)} |"
+        f"| {escape(k)} | {v * 100.0 / lang_sum:5.1f}% {bar(v * 100.0 / lang_sum, BAR_W_OVERALL)} |"
         for k, v in lang_rows
     )
     # Tech adoption Top-N
     tech_rows = sorted(tech_presence.items(),
                        key=lambda kv: kv[1], reverse=True)[:TOP_TECHS]
     tech_md = "| Tech | Adoption |\n|---|---:|\n" + "\n".join(
-        f"| {escape(k)} | {(v*100.0/max(1,repo_cnt)):5.1f}% {bar(v*100.0/max(1,repo_cnt), BAR_W_OVERALL)} |"
+        f"| {escape(k)} | {(v * 100.0 / max(1, repo_cnt)):5.1f}% {bar(v * 100.0 / max(1, repo_cnt), BAR_W_OVERALL)} |"
         for k, v in tech_rows
     )
+    note = "<sub>Note: GitHub counts `.tf` as HCL; shown as Terraform for readability.</sub>"
     return "Languages (by bytes across selected repos)\n\n" + lang_md + \
-           "\n\nTech adoption (share of selected repos)\n\n" + tech_md
+           "\n\nTech adoption (share of selected repos)\n\n" + tech_md + \
+           "\n\n" + note
 
 
 def write_block(txt: str, start: str, end: str, body: str) -> str:
     block = f"{start}\n{body}\n{end}"
     if start in txt and end in txt:
-        return re.sub(re.escape(start)+r".*?"+re.escape(end), block, txt, flags=re.S)
+        return re.sub(re.escape(start) + r".*?" + re.escape(end), block, txt, flags=re.S)
     return txt + f"\n\n{block}\n"
 
-# ===== 主流程 =====
+# ---------- Main ----------
 
 
-def main():
-    repo_map = list_owner_repos(USER)           # {name: repo}
-    # 严格按白名单顺序取仓库
+def main() -> None:
+    repo_map = list_owner_repos(USER)  # {name: repo}
+
+    # Preserve the whitelist order
     selected = [repo_map[name] for name in INCLUDE_REPOS if name in repo_map]
 
-    rows = []
+    rows: List[Dict] = []
     lang_total: Dict[str, int] = Counter()
     tech_presence: Dict[str, int] = Counter()
 
     for r in selected:
         full = r["full_name"]
-        techs = detect_tech(full)
-        langs = get_languages(full)             # {Lang: bytes}
+
+        # 1) Tech override (replace). Switch to "append" if needed (see TECH_OVERRIDE note above).
+        techs = TECH_OVERRIDE.get(r["name"]) or detect_tech(full)
+
+        # 2) Languages with alias normalization (HCL -> Terraform (HCL))
+        langs_raw = get_languages(full)
+        langs = normalize_langs(langs_raw)
+
         rows.append(
             {"name": r["name"], "url": r["html_url"], "tech": techs, "lang": langs})
+
         for k, v in langs.items():
             lang_total[k] += int(v)
         for t in set(techs):

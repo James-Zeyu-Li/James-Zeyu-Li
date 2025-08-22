@@ -14,43 +14,8 @@ You can click the Preview link to take a look at your changes.
 
 ## Recent Projects & Tech
 <!--TECH-PROJECTS:START-->
-| Project | Tech | Code mix |
-|---|---|---|
-| [CS6650_2025_TA](https://github.com/James-Zeyu-Li/CS6650_2025_TA) | - | Go 47.2% █████░░░░░ / HCL 27.6% ███░░░░░░░ |
-| [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | AWS · DynamoDB · MySQL · RabbitMQ · Redis | Java 91.6% █████████░ / Shell  4.7% ░░░░░░░░░░ |
-| [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
-| [LocalSimulationKG](https://github.com/James-Zeyu-Li/LocalSimulationKG) | AWS · Next.js · Terraform | Python 63.1% ██████░░░░ / HCL 20.1% ██░░░░░░░░ |
-| [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | AWS · MySQL · RabbitMQ | Java 95.7% ██████████ / Go  3.1% ░░░░░░░░░░ |
-| [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | - | C++ 89.0% █████████░ / Python  9.9% █░░░░░░░░░ |
-| [VirtualMemorySimulator](https://github.com/James-Zeyu-Li/VirtualMemorySimulator) | - | C++ 79.2% ████████░░ / Python 18.0% ██░░░░░░░░ |
 <!--TECH-PROJECTS:END-->
 
 ## Tech Summary
 <!--TECH-OVERALL:START-->
-Languages (by bytes across selected repos)
-
-| Language | Share |
-|---|---:|
-| Java |  46.3% ██████░░░░░░ |
-| C++ |  26.6% ███░░░░░░░░░ |
-| Python |  12.2% █░░░░░░░░░░░ |
-| Shell |   5.6% █░░░░░░░░░░░ |
-| Go |   4.3% █░░░░░░░░░░░ |
-| HCL |   2.5% ░░░░░░░░░░░░ |
-
-Tech adoption (share of selected repos)
-
-| Tech | Adoption |
-|---|---:|
-| AWS |  42.9% █████░░░░░░░ |
-| RabbitMQ |  28.6% ███░░░░░░░░░ |
-| MySQL |  28.6% ███░░░░░░░░░ |
-| Next.js |  28.6% ███░░░░░░░░░ |
-| DynamoDB |  14.3% ██░░░░░░░░░░ |
-| Redis |  14.3% ██░░░░░░░░░░ |
-| Flask |  14.3% ██░░░░░░░░░░ |
-| gRPC |  14.3% ██░░░░░░░░░░ |
-| Nginx |  14.3% ██░░░░░░░░░░ |
-| Terraform |  14.3% ██░░░░░░░░░░ |
 <!--TECH-OVERALL:END-->
-
