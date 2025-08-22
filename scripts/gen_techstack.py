@@ -5,14 +5,12 @@ import os
 import re
 import base64
 import requests
-import math
 import time
 from typing import List, Dict, Set, Optional
-from collections import defaultdict, Counter
+from collections import Counter
 
-USER = os.getenv("PROFILE_USERNAME", "James-Zeyu-Li")  # 你的 GitHub 用户名
-READ_TOKEN = os.getenv("GITHUB_TOKEN") or os.getenv(
-    "GH_TOKEN") or ""  # 可选，提升 API 配额
+USER = os.getenv("PROFILE_USERNAME", "James-Zeyu-Li")
+READ_TOKEN = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or ""
 TIMEOUT = 30
 
 # ---- 只读白名单 ----
@@ -25,6 +23,7 @@ INCLUDE_REPOS: Set[str] = {
 # README 占位符
 STACK_START, STACK_END = "<!--TECH-STACK:START-->", "<!--TECH-STACK:END-->"
 SUM_START,   SUM_END = "<!--TECH-SUMMARY:START-->", "<!--TECH-SUMMARY:END-->"
+PROJ_START,  PROJ_END = "<!--TECH-PROJECT-SHARE:START-->", "<!--TECH-PROJECT-SHARE:END-->"
 README_PATH = "README.md"
 
 GITHUB = "https://api.github.com"
@@ -41,7 +40,6 @@ sess.headers.update(HEAD)
 
 
 def fetch_all_repos(username: str) -> List[Dict]:
-    """列出所有 owner 仓库，分页处理。"""
     out, page = [], 1
     while True:
         url = f"{GITHUB}/users/{username}/repos?type=owner&sort=updated&per_page=100&page={page}"
@@ -68,12 +66,9 @@ def get_file(full: str, path: str) -> Optional[str]:
 
 
 def get_languages_bytes(full: str) -> Dict[str, int]:
-    """按语言字节数统计（官方口径）。"""
     url = f"{GITHUB}/repos/{full}/languages"
     r = sess.get(url, timeout=TIMEOUT)
-    if r.status_code == 200:
-        return r.json() or {}
-    return {}
+    return r.json() if r.status_code == 200 else {}
 
 
 TECH_KWS = [
@@ -92,7 +87,6 @@ TECH_KWS = [
 
 
 def detect_repo_tech(repo_full: str) -> List[str]:
-    """从常见文件/README 中识别技术标签（presence-based）。"""
     files = {
         "go.mod": get_file(repo_full, "go.mod"),
         "pom.xml": get_file(repo_full, "pom.xml"),
@@ -102,7 +96,6 @@ def detect_repo_tech(repo_full: str) -> List[str]:
         "Dockerfile": get_file(repo_full, "Dockerfile"),
     }
     tech = set()
-    # 语言/框架线索
     if files["go.mod"]:
         tech.add("Go")
         if re.search(r'\bgin-gonic/gin\b', files["go.mod"]):
@@ -133,12 +126,20 @@ def detect_repo_tech(repo_full: str) -> List[str]:
     for kw, label in TECH_KWS:
         if re.search(kw, blob, re.I):
             tech.add(label)
-
     return sorted(tech)
 
 
 def escape_pipes(s: str) -> str:
     return s.replace("|", r"\|")
+
+
+def human_bytes(n: int) -> str:
+    units = ["B", "KB", "MB", "GB"]
+    v = float(n)
+    for u in units:
+        if v < 1024 or u == "GB":
+            return f"{v:.1f} {u}"
+        v /= 1024
 
 
 def build_project_table(rows: List[Dict]) -> str:
@@ -148,28 +149,26 @@ def build_project_table(rows: List[Dict]) -> str:
     return header + body
 
 
-def fmt_pct(n: int, d: int) -> str:
-    if d <= 0:
-        return "0%"
-    return f"{(n*100.0/d):.1f}%"
+def fmt_pct(num: int, den: int) -> str:
+    return "0.0%" if den <= 0 else f"{(num*100.0/den):.1f}%"
 
 
-def build_summary_tables(lang_bytes_total: Dict[str, int], tech_presence: Dict[str, int], repo_count: int) -> str:
-    # A. Languages by bytes
+def build_summary_tables(lang_bytes_total: Dict[str, int],
+                         tech_presence: Dict[str, int],
+                         repo_count: int) -> str:
+    # Languages (by bytes)
     lang_rows = sorted(lang_bytes_total.items(),
                        key=lambda kv: kv[1], reverse=True)
     lang_sum = sum(v for _, v in lang_rows) or 1
     lang_md = "| Language | Share |\n|---|---|\n" + "\n".join(
         f"| {escape_pipes(k)} | {v*100.0/lang_sum:.1f}% |" for k, v in lang_rows
     )
-
-    # B. Tech adoption (% repos that contain该技术)
+    # Tech adoption (% repos)
     tech_rows = sorted(tech_presence.items(),
                        key=lambda kv: kv[1], reverse=True)
     tech_md = "| Tech | Adoption |\n|---|---|\n" + "\n".join(
         f"| {escape_pipes(k)} | {fmt_pct(v, repo_count)} |" for k, v in tech_rows
     )
-
     return (
         "### Overall Tech Usage\n\n"
         "**Languages (by bytes across selected repos)**\n\n" + lang_md +
@@ -178,23 +177,32 @@ def build_summary_tables(lang_bytes_total: Dict[str, int], tech_presence: Dict[s
     )
 
 
-def update_readme(stack_table: str, summary_block: str):
+def build_project_share_table(project_bytes: List[Dict]) -> str:
+    # project_bytes = [{name,url,bytes}]
+    total = sum(p["bytes"] for p in project_bytes) or 1
+    header = "| Project | Code Size | Share |\n|---|---:|---:|\n"
+    rows = []
+    for p in sorted(project_bytes, key=lambda x: x["bytes"], reverse=True):
+        rows.append(
+            f"| [{escape_pipes(p['name'])}]({p['url']}) | {human_bytes(p['bytes'])} | {p['bytes']*100.0/total:.1f}% |")
+    return header + "\n".join(rows)
+
+
+def update_readme(stack_table: str, summary_block: str, project_share_md: str):
     with open(README_PATH, "r+", encoding="utf-8") as f:
         txt = f.read()
 
-        stack_block = f"{STACK_START}\n{stack_table}\n{STACK_END}"
-        if STACK_START in txt and STACK_END in txt:
-            txt = re.sub(re.escape(STACK_START) + r".*?" + re.escape(STACK_END),
-                         stack_block, txt, flags=re.S)
-        else:
-            txt += f"\n\n## Recent Projects & Tech\n{stack_block}\n"
+        def replace_block(txt, start, end, body):
+            block = f"{start}\n{body}\n{end}"
+            if start in txt and end in txt:
+                return re.sub(re.escape(start) + r".*?" + re.escape(end), block, txt, flags=re.S)
+            else:
+                # 默认插入在文末
+                return txt + f"\n\n{block}\n"
 
-        sum_block = f"{SUM_START}\n{summary_block}\n{SUM_END}"
-        if SUM_START in txt and SUM_END in txt:
-            txt = re.sub(re.escape(SUM_START) + r".*?" + re.escape(SUM_END),
-                         sum_block, txt, flags=re.S)
-        else:
-            txt += f"\n\n## Tech Summary\n{sum_block}\n"
+        txt = replace_block(txt, STACK_START, STACK_END, stack_table)
+        txt = replace_block(txt, SUM_START,   SUM_END,   summary_block)
+        txt = replace_block(txt, PROJ_START,  PROJ_END,  project_share_md)
 
         f.seek(0)
         f.write(txt)
@@ -216,28 +224,30 @@ def main():
     rows = []
     tech_presence: Dict[str, int] = Counter()
     lang_bytes_total: Dict[str, int] = Counter()
+    project_bytes: List[Dict] = []
 
     for r in selected:
         full = r["full_name"]
         techs = detect_repo_tech(full)
         rows.append({"name": r["name"], "url": r["html_url"], "tech": techs})
 
-        # languages bytes
         lang_bytes = get_languages_bytes(full)
+        repo_total_bytes = sum(int(v) for v in lang_bytes.values())
+        project_bytes.append(
+            {"name": r["name"], "url": r["html_url"], "bytes": repo_total_bytes})
+
         for k, v in lang_bytes.items():
             lang_bytes_total[k] += int(v)
 
-        # tech presence (按仓库出现与否)
         for t in set(techs):
             tech_presence[t] += 1
 
-    # 生成表格
     stack_table = build_project_table(rows)
     summary_md = build_summary_tables(
         lang_bytes_total, tech_presence, len(selected))
-    update_readme(stack_table, summary_md)
+    project_md = build_project_share_table(project_bytes)
+    update_readme(stack_table, summary_md, project_md)
 
 
 if __name__ == "__main__":
-    import re
     main()

@@ -11,6 +11,7 @@ You can click the Preview link to take a look at your changes.
 - **Tools**: Linux, Git, VS Code, IntelliJ IDEA, Maven, Postman, Apptainer(Singularity), Docker
 - **Cloud & Web**: AWS EC2, AWS RDS, gRPC, RabbitMQ, Apache Kafka, Java Servlet, Flask, Go Gin, Nginx
 
+
 ## Recent Projects & Tech
 <!--TECH-STACK:START-->
 <!--TECH-STACK:END-->
@@ -19,6 +20,6 @@ You can click the Preview link to take a look at your changes.
 <!--TECH-SUMMARY:START-->
 <!--TECH-SUMMARY:END-->
 
-
-(https://raw.githubusercontent.com/James-Zeyu-Li/James-Zeyu-Li/main/assets/profile-metrics.svg)
-
+## Project Code Share
+<!--TECH-PROJECT-SHARE:START-->
+<!--TECH-PROJECT-SHARE:END-->

@@ -1,8 +1,6 @@
 name: Update Tech Stack
 on:
-  push:
-    branches: [ "main" ]     # 只在你的默认分支 push 时触发
-  workflow_dispatch:          # 允许手动运行
+  workflow_dispatch:          # 只有手动 Run 才会触发
 
 permissions:
   contents: write
@@ -25,7 +23,7 @@ jobs:
 
       - name: Generate tech tables
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # 可选，不设也能跑（配额低一些）
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # 默认就有；用于提升 API 配额
           PROFILE_USERNAME: ${{ env.PROFILE_USERNAME }}
         run: python scripts/gen_techstack.py
 
