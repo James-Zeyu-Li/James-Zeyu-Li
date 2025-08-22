@@ -10,3 +10,7 @@ You can click the Preview link to take a look at your changes.
 - **Languages**: Java, Python, Golang, C++, C, SQL
 - **Tools**: Linux, Git, VS Code, IntelliJ IDEA, Maven, Postman, Apptainer(Singularity), Docker
 - **Cloud & Web**: AWS EC2, AWS RDS, gRPC, RabbitMQ, Apache Kafka, Java Servlet, Flask, Go Gin, Nginx
+
+## Recent Projects & Tech
+<!--TECH-STACK:START-->
+<!--TECH-STACK:END-->
