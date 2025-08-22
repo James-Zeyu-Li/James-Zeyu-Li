@@ -6,25 +6,39 @@ import re
 import base64
 import requests
 import time
-from typing import List, Dict, Set, Optional
+from typing import List, Dict, Optional
 from collections import Counter
 
+# ===== 基本配置 =====
 USER = os.getenv("PROFILE_USERNAME", "James-Zeyu-Li")
 TOKEN = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or ""
 TIMEOUT = 30
 
-# —— 只读白名单（精确匹配仓库名） ——
-INCLUDE_REPOS: Set[str] = {
-    "CS6650_2025_TA", "profolio_website", "High-Concurrency-CQRS-Ticketing-Platform",
-    "CedarArbutusCode", "LocalSimulationKG", "CS6650_scalable_distributed",
-    "DistributedAlbumStorage", "VirtualMemorySimulator", "ConcurrencyTesting"
-}
+# 白名单（按此顺序渲染；名称需与仓库精确匹配）
+INCLUDE_REPOS: List[str] = [
+    "CS6650_2025_TA",
+    "High-Concurrency-CQRS-Ticketing-Platform",
+    "CedarArbutusCode",
+    "LocalSimulationKG",
+    "DistributedAlbumStorage",
+    "ConcurrencyTesting",
+    "VirtualMemorySimulator",
+    # "profolio_website", "CS6650_scalable_distributed" 如需展示可解注
+]
 
-# README 占位（仅保留两块）
+# README 占位（仅两块）
 PJT_START, PJT_END = "<!--TECH-PROJECTS:START-->", "<!--TECH-PROJECTS:END-->"
 OVR_START, OVR_END = "<!--TECH-OVERALL:START-->", "<!--TECH-OVERALL:END-->"
 README = "README.md"
 
+# 展示参数
+TOP_LANGS = 6
+TOP_TECHS = 10
+BAR_W_PROJECT = 10
+BAR_W_OVERALL = 12
+TECH_PER_ROW = 5
+
+# ===== HTTP 基元 =====
 GITHUB = "https://api.github.com"
 HEAD = {
     "Accept": "application/vnd.github+json",
@@ -36,10 +50,9 @@ if TOKEN:
 sess = requests.Session()
 sess.headers.update(HEAD)
 
-# ---------- HTTP ----------
 
-
-def list_owner_repos(user: str) -> List[Dict]:
+def list_owner_repos(user: str) -> Dict[str, dict]:
+    """返回 {repo_name: repo_obj}，仅 owner 仓库。"""
     out, page = [], 1
     while True:
         url = f"{GITHUB}/users/{user}/repos?type=owner&sort=updated&per_page=100&page={page}"
@@ -51,12 +64,17 @@ def list_owner_repos(user: str) -> List[Dict]:
         out.extend(arr)
         page += 1
         time.sleep(0.1)
-    return out
+    # 过滤在这里做，后面可按白名单顺序索引
+    keep = {}
+    for r in out:
+        if r.get("fork") or r.get("private") or r.get("archived") or r.get("disabled") or r.get("is_template"):
+            continue
+        keep[r["name"]] = r
+    return keep
 
 
 def get_file(full: str, path: str) -> Optional[str]:
-    url = f"{GITHUB}/repos/{full}/contents/{path}"
-    r = sess.get(url, timeout=15)
+    r = sess.get(f"{GITHUB}/repos/{full}/contents/{path}", timeout=15)
     if r.status_code != 200:
         return None
     data = r.json()
@@ -70,7 +88,7 @@ def get_languages(full: str) -> Dict[str, int]:
     return r.json() if r.status_code == 200 else {}
 
 
-# ---------- Tech 识别 ----------
+# ===== Tech 识别 =====
 KWS = [
     (r'\bredis\b', "Redis"), (r'\brabbitmq\b', "RabbitMQ"), (r'\bkafka\b', "Kafka"),
     (r'\b(dynamodb|aws dynamodb)\b', "DynamoDB"), (r'\bpostgres(ql)?\b', "PostgreSQL"),
@@ -110,11 +128,10 @@ def detect_tech(full: str) -> List[str]:
             tech.add(label)
     return sorted(tech)
 
-# ---------- 渲染（更紧凑） ----------
+# ===== 渲染 =====
 
 
-def bar(pct: float, width: int = 10) -> str:
-    # 短进度条：█/░，宽度=10
+def bar(pct: float, width: int) -> str:
     pct = max(0.0, min(100.0, pct))
     filled = round(pct/100.0*width)
     return "█"*filled + "░"*(width - filled)
@@ -124,7 +141,7 @@ def escape(s: str) -> str:
     return s.replace("|", r"\|")
 
 
-def shorten(techs: List[str], limit: int = 5) -> str:
+def shorten(techs: List[str], limit: int) -> str:
     if len(techs) <= limit:
         return " · ".join(techs)
     return " · ".join(techs[:limit]) + f" · +{len(techs)-limit}"
@@ -134,18 +151,20 @@ def render_code_mix(lang_bytes: Dict[str, int], top: int = 2) -> str:
     total = sum(lang_bytes.values()) or 1
     top_items = sorted(lang_bytes.items(),
                        key=lambda kv: kv[1], reverse=True)[:top]
+    if not top_items:
+        return "-"
     parts = []
     for name, v in top_items:
         pct = v * 100.0 / total
-        parts.append(f"{name} {pct:>4.1f}% {bar(pct, width=10)}")
-    return " / ".join(parts) if parts else "-"
+        parts.append(f"{name} {pct:>4.1f}% {bar(pct, BAR_W_PROJECT)}")
+    return " / ".join(parts)
 
 
 def md_projects(rows: List[Dict]) -> str:
     header = "| Project | Tech | Code mix |\n|---|---|---|\n"
     body = "\n".join(
         f"| [{escape(r['name'])}]({r['url']}) | "
-        f"{(shorten(r['tech'], 5) if r['tech'] else '-') } | "
+        f"{(shorten(r['tech'], TECH_PER_ROW) if r['tech'] else '-') } | "
         f"{render_code_mix(r['lang'])} |"
         for r in rows
     )
@@ -153,23 +172,23 @@ def md_projects(rows: List[Dict]) -> str:
 
 
 def md_overall(lang_total: Dict[str, int], tech_presence: Dict[str, int], repo_cnt: int) -> str:
-    # Top-6 语言
-    lang_rows = sorted(lang_total.items(),
-                       key=lambda kv: kv[1], reverse=True)[:6]
-    lang_sum = sum(v for _, v in lang_total.items()) or 1
+    # Languages Top-N
+    lang_rows = sorted(lang_total.items(), key=lambda kv: kv[1], reverse=True)[
+        :TOP_LANGS]
+    lang_sum = sum(lang_total.values()) or 1
     lang_md = "| Language | Share |\n|---|---:|\n" + "\n".join(
-        f"| {escape(k)} | {v*100.0/lang_sum:5.1f}% {bar(v*100.0/lang_sum, width=12)} |"
+        f"| {escape(k)} | {v*100.0/lang_sum:5.1f}% {bar(v*100.0/lang_sum, BAR_W_OVERALL)} |"
         for k, v in lang_rows
     )
-    # Top-10 Tech
+    # Tech adoption Top-N
     tech_rows = sorted(tech_presence.items(),
-                       key=lambda kv: kv[1], reverse=True)[:10]
+                       key=lambda kv: kv[1], reverse=True)[:TOP_TECHS]
     tech_md = "| Tech | Adoption |\n|---|---:|\n" + "\n".join(
-        f"| {escape(k)} | {(v*100.0/max(1,repo_cnt)):5.1f}% {bar(v*100.0/max(1,repo_cnt), width=12)} |"
+        f"| {escape(k)} | {(v*100.0/max(1,repo_cnt)):5.1f}% {bar(v*100.0/max(1,repo_cnt), BAR_W_OVERALL)} |"
         for k, v in tech_rows
     )
-    return "**Languages (by bytes across selected repos)**\n\n" + lang_md + \
-           "\n\n**Tech adoption (share of selected repos)**\n\n" + tech_md
+    return "Languages (by bytes across selected repos)\n\n" + lang_md + \
+           "\n\nTech adoption (share of selected repos)\n\n" + tech_md
 
 
 def write_block(txt: str, start: str, end: str, body: str) -> str:
@@ -178,20 +197,13 @@ def write_block(txt: str, start: str, end: str, body: str) -> str:
         return re.sub(re.escape(start)+r".*?"+re.escape(end), block, txt, flags=re.S)
     return txt + f"\n\n{block}\n"
 
-# ---------- 主流程 ----------
+# ===== 主流程 =====
 
 
 def main():
-    repos = list_owner_repos(USER)
-    selected = [
-        r for r in repos
-        if r["name"] in INCLUDE_REPOS
-        and not r.get("fork", False)
-        and not r.get("private", False)
-        and not r.get("archived", False)
-        and not r.get("disabled", False)
-        and not r.get("is_template", False)
-    ]
+    repo_map = list_owner_repos(USER)           # {name: repo}
+    # 严格按白名单顺序取仓库
+    selected = [repo_map[name] for name in INCLUDE_REPOS if name in repo_map]
 
     rows = []
     lang_total: Dict[str, int] = Counter()
@@ -200,10 +212,9 @@ def main():
     for r in selected:
         full = r["full_name"]
         techs = detect_tech(full)
-        langs = get_languages(full)          # {Lang: bytes}
+        langs = get_languages(full)             # {Lang: bytes}
         rows.append(
             {"name": r["name"], "url": r["html_url"], "tech": techs, "lang": langs})
-
         for k, v in langs.items():
             lang_total[k] += int(v)
         for t in set(techs):
