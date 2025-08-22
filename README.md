@@ -10,9 +10,10 @@ You can click the Preview link to take a look at your changes.
   - LinkedIn: www.linkedin.com/in/zeyujames
 
 ## 💻 Technical Skills
-- **Languages**: Java, Python, Golang, C++, C, SQL
-- **Tools**: Linux, Git, VS Code, IntelliJ IDEA, Maven, Postman, Apptainer(Singularity), Docker
-- **Cloud & Web**: AWS EC2, AWS RDS, gRPC, RabbitMQ, Apache Kafka, Java Servlet, Flask, Go Gin, Nginx
+- **Programming Languages**: Java, Python, Golang, C++, SQL, HTML, CSS
+- **Frameworks and APIs**: Java SpringBoot, Go Gin, Flask, RESTful API, Microservices, gRPC
+- **Databases and Messaging**: MySQL, MongoDB, DynamoDB, Redis, RabbitMQ, Apache Kafka
+- **Cloud and Infrastructure**: AWS (EC2, ECR, ECS, Lambda, RDS, S3), Terraform, Docker, Linux, Git, Maven
 
 
 ## Recent Projects & Tech
