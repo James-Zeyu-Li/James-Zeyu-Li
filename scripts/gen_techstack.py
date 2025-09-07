@@ -47,11 +47,11 @@ INCLUDE_REPOS: List[str] = [
     "CS6650_2025_TA",
     "High-Concurrency-CQRS-Ticketing-Platform",
     "CedarArbutusCode",
-    "LocalSimulationKG",
+    # "LocalSimulationKG",
     "DistributedAlbumStorage",
     "ConcurrencyTesting",
     "VirtualMemorySimulator",
-    # "profolio_website",
+    "profolio_website",
     # "CS6650_scalable_distributed",
 ]
 
