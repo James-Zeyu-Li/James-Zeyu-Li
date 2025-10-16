@@ -17,6 +17,7 @@ import os
 import re
 import base64
 import time
+import json
 from typing import List, Dict, Optional
 from collections import Counter
 
@@ -44,7 +45,7 @@ def normalize_langs(lang_bytes: Dict[str, int]) -> Dict[str, int]:
 
 # ===== Whitelist (render in this order) =====
 INCLUDE_REPOS: List[str] = [
-    "CS6650_2025_TA",
+    # "CS6650_2025_TA",
     "High-Concurrency-CQRS-Ticketing-Platform",
     "CedarArbutusCode",
     # "LocalSimulationKG",
@@ -70,9 +71,9 @@ README = "README.md"
 
 # ===== Rendering params =====
 TOP_LANGS = 6
-TOP_TECHS = 10
+TOP_TECHS = 6
 BAR_W_PROJECT = 10
-BAR_W_OVERALL = 12
+BAR_W_OVERALL = 10
 TECH_PER_ROW = 5
 
 # ===== HTTP =====
@@ -143,27 +144,77 @@ SCAN_FILES = [
     "pom.xml", "build.gradle", "build.gradle.kts",
     "package.json", "yarn.lock", "pnpm-lock.yaml",
     "requirements.txt", "pyproject.toml", "Pipfile", "environment.yml",
-    "Dockerfile", "README.md"
+    "Dockerfile", "README.md",
+    "Cargo.toml", "Gemfile", "composer.json", "pubspec.yaml"
 ]
 
 
 def detect_tech(full: str) -> List[str]:
     tech = set()
     f = {p: get_file(full, p) for p in SCAN_FILES}
+    
+    # Basic file existence checks
     if f["go.mod"]:
         tech.add("Go")
     if f["pom.xml"] or f["build.gradle"] or f["build.gradle.kts"]:
         tech.update(["Java", "Spring Boot"])
     if f["package.json"]:
         tech.update(["Node.js", "NPM"])
-    if f["requirements.txt"] or f["pyproject.toml"]:
+    if f["requirements.txt"] or f["pyproject.toml"] or f["Pipfile"]:
         tech.add("Python")
     if f["Dockerfile"]:
         tech.add("Docker")
+    
+    # Parse package.json for specific frameworks
+    if f["package.json"]:
+        try:
+            pkg = json.loads(f["package.json"])
+            deps = set(pkg.get("dependencies", {}).keys()) | set(pkg.get("devDependencies", {}).keys())
+            if "react" in deps:
+                tech.add("React")
+            if "express" in deps:
+                tech.add("Express")
+            if "next" in deps:
+                tech.add("Next.js")
+            if "vue" in deps:
+                tech.add("Vue.js")
+            if "angular" in deps:
+                tech.add("Angular")
+        except (json.JSONDecodeError, TypeError):
+            pass
+    
+    # Parse requirements.txt for Python frameworks
+    if f["requirements.txt"]:
+        for line in f["requirements.txt"].splitlines():
+            line = line.strip().lower()
+            if "fastapi" in line:
+                tech.add("FastAPI")
+            if "flask" in line:
+                tech.add("Flask")
+            if "django" in line:
+                tech.add("Django")
+            if "tensorflow" in line or "torch" in line:
+                tech.add("Machine Learning")
+    
+    # Parse pyproject.toml for Python
+    if f["pyproject.toml"]:
+        try:
+            import tomllib
+            data = tomllib.loads(f["pyproject.toml"])
+            deps = data.get("tool", {}).get("poetry", {}).get("dependencies", {})
+            for dep in deps:
+                if "fastapi" in dep.lower():
+                    tech.add("FastAPI")
+                # Add more as needed
+        except ImportError:
+            pass  # tomllib not available in older Python
+    
+    # Keyword search in all files
     blob = " ".join((v or "") for v in f.values())
     for kw, label in KWS:
         if re.search(kw, blob, re.I):
             tech.add(label)
+    
     return sorted(tech)
 
 # ---------- Rendering ----------
