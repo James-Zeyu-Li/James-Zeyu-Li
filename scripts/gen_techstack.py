@@ -46,14 +46,15 @@ def normalize_langs(lang_bytes: Dict[str, int]) -> Dict[str, int]:
 # ===== Whitelist (render in this order) =====
 INCLUDE_REPOS: List[str] = [
     # "CS6650_2025_TA",
+    # "LocalSimulationKG",
+    # "CS6650_scalable_distributed",
+
     "High-Concurrency-CQRS-Ticketing-Platform",
     "CedarArbutusCode",
-    # "LocalSimulationKG",
     "DistributedAlbumStorage",
     "ConcurrencyTesting",
     "VirtualMemorySimulator",
-    "profolio_website",
-    # "CS6650_scalable_distributed",
+    "profolio_website"
 ]
 
 # ===== Tech override by repo (exact name match) =====
@@ -70,8 +71,8 @@ OVR_START, OVR_END = "<!--TECH-OVERALL:START-->", "<!--TECH-OVERALL:END-->"
 README = "README.md"
 
 # ===== Rendering params =====
-TOP_LANGS = 6
-TOP_TECHS = 6
+TOP_LANGS = 8
+TOP_TECHS = 10
 BAR_W_PROJECT = 10
 BAR_W_OVERALL = 10
 TECH_PER_ROW = 5
