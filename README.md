@@ -9,9 +9,19 @@ You can click the Preview link to take a look at your changes.
   - Profolio Website: https://zeyujames.vercel.app/
   - LinkedIn: www.linkedin.com/in/zeyujames
 
-## 💻 Technical Skills
+## Technical Skills
 - **Programming Languages**: Java, Python, Golang, C++, SQL, HTML, CSS
 - **Frameworks and APIs**: Java SpringBoot, Go Gin, Flask, RESTful API, Microservices, gRPC
 - **Databases and Messaging**: MySQL, MongoDB, DynamoDB, Redis, RabbitMQ, Apache Kafka
 - **Cloud and Infrastructure**: AWS (EC2, ECR, ECS, Lambda, RDS, S3), Terraform, Docker, Linux, Git, Maven
+
+## Recent Projects
+
+<!--TECH-PROJECTS:START-->
+<!--TECH-PROJECTS:END-->
+
+## Tech Stack Overview
+
+<!--TECH-OVERALL:START-->
+<!--TECH-OVERALL:END-->
 
