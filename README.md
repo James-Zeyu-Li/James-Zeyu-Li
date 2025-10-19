@@ -20,7 +20,7 @@ You can click the Preview link to take a look at your changes.
 <!--TECH-PROJECTS:START-->
 | Project | Tech | Code mix |
 |---|---|---|
-| [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | AWS · Java · Kafka · MySQL · RabbitMQ · +2 | Java 79.6% ████████░░ / Shell 18.2% ██░░░░░░░░ |
+| [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | AWS · Java · Kafka · MySQL · RabbitMQ · +2 | Java 78.9% ████████░░ / Shell 18.9% ██░░░░░░░░ |
 | [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
 | [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | AWS · MySQL · RabbitMQ | Java 95.7% ██████████ / Go  3.1% ░░░░░░░░░░ |
 | [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | Computer Systems | C++ 89.0% █████████░ / Python  9.9% █░░░░░░░░░ |
@@ -34,10 +34,10 @@ Languages (by bytes across selected repos)
 
 | Language | Share |
 |---|---:|
-| Java |  54.1% █████░░░░░ |
-| C++ |  25.2% ███░░░░░░░ |
-| Shell |   9.3% █░░░░░░░░░ |
-| Python |   9.1% █░░░░░░░░░ |
+| Java |  53.7% █████░░░░░ |
+| C++ |  25.5% ███░░░░░░░ |
+| Shell |   9.4% █░░░░░░░░░ |
+| Python |   9.2% █░░░░░░░░░ |
 | Go |   1.0% ░░░░░░░░░░ |
 | Lua |   0.5% ░░░░░░░░░░ |
 | CMake |   0.3% ░░░░░░░░░░ |
@@ -47,16 +47,16 @@ Tech adoption (share of selected repos)
 
 | Tech | Adoption |
 |---|---:|
-| RabbitMQ |  40.0% ████░░░░░░ |
 | MySQL |  40.0% ████░░░░░░ |
+| RabbitMQ |  40.0% ████░░░░░░ |
 | AWS |  40.0% ████░░░░░░ |
 | Computer Systems |  40.0% ████░░░░░░ |
 | Java |  20.0% ██░░░░░░░░ |
+| Redis |  20.0% ██░░░░░░░░ |
 | Spring Boot |  20.0% ██░░░░░░░░ |
 | Kafka |  20.0% ██░░░░░░░░ |
-| Redis |  20.0% ██░░░░░░░░ |
-| Next.js |  20.0% ██░░░░░░░░ |
-| Flask |  20.0% ██░░░░░░░░ |
+| gRPC |  20.0% ██░░░░░░░░ |
+| Nginx |  20.0% ██░░░░░░░░ |
 
 <sub>Note: GitHub counts `.tf` as HCL; shown as Terraform for readability.</sub>
 <!--TECH-OVERALL:END-->
