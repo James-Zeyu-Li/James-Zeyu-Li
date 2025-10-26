@@ -47,16 +47,16 @@ Tech adoption (share of selected repos)
 
 | Tech | Adoption |
 |---|---:|
-| AWS |  40.0% ████░░░░░░ |
 | MySQL |  40.0% ████░░░░░░ |
+| AWS |  40.0% ████░░░░░░ |
 | Computer Systems |  40.0% ████░░░░░░ |
+| Redis |  20.0% ██░░░░░░░░ |
 | Kafka |  20.0% ██░░░░░░░░ |
 | Spring Boot |  20.0% ██░░░░░░░░ |
 | Java |  20.0% ██░░░░░░░░ |
-| Redis |  20.0% ██░░░░░░░░ |
 | gRPC |  20.0% ██░░░░░░░░ |
-| Flask |  20.0% ██░░░░░░░░ |
 | Next.js |  20.0% ██░░░░░░░░ |
+| Nginx |  20.0% ██░░░░░░░░ |
 
 <sub>Note: GitHub counts `.tf` as HCL; shown as Terraform for readability.</sub>
 <!--TECH-OVERALL:END-->
