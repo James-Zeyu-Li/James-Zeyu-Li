@@ -50,6 +50,7 @@ INCLUDE_REPOS: List[str] = [
     # "CS6650_scalable_distributed",
 
     "High-Concurrency-CQRS-Ticketing-Platform",
+    "Ticketing-Cloud-Deployment",
     "CedarArbutusCode",
     "DistributedAlbumStorage",
     "ConcurrencyTesting",
@@ -71,8 +72,8 @@ OVR_START, OVR_END = "<!--TECH-OVERALL:START-->", "<!--TECH-OVERALL:END-->"
 README = "README.md"
 
 # ===== Rendering params =====
-TOP_LANGS = 8
-TOP_TECHS = 10
+TOP_LANGS = 5
+TOP_TECHS = 5
 BAR_W_PROJECT = 10
 BAR_W_OVERALL = 10
 TECH_PER_ROW = 5
@@ -130,8 +131,8 @@ def get_languages(full: str) -> Dict[str, int]:
 
 # ---------- Tech detection ----------
 KWS = [
-    (r'\bredis\b', "Redis"), (r'\brabbitmq\b', "RabbitMQ"), (r'\bkafka\b', "Kafka"),
-    (r'\b(dynamodb|aws dynamodb)\b', "DynamoDB"), (r'\bpostgres(ql)?\b', "PostgreSQL"),
+    (r'\bredis\b', "Redis"),  (r'\bkafka\b', "Kafka"),
+    (r'\b(dynamodb|aws dynamodb)\b', "DynamoDB"), (r'\brabbitmq\b', "RabbitMQ"),
     (r'\bmysql\b', "MySQL"), (r'\bmongodb\b', "MongoDB"), (r'\baws\b', "AWS"),
     (r'\bterraform\b', "Terraform"), (r'\bkubernetes|k8s\b', "Kubernetes"),
     (r'\bnginx\b', "Nginx"), (r'\bgrpc\b', "gRPC"),
@@ -153,7 +154,7 @@ SCAN_FILES = [
 def detect_tech(full: str) -> List[str]:
     tech = set()
     f = {p: get_file(full, p) for p in SCAN_FILES}
-    
+
     # Basic file existence checks
     if f["go.mod"]:
         tech.add("Go")
@@ -165,12 +166,13 @@ def detect_tech(full: str) -> List[str]:
         tech.add("Python")
     if f["Dockerfile"]:
         tech.add("Docker")
-    
+
     # Parse package.json for specific frameworks
     if f["package.json"]:
         try:
             pkg = json.loads(f["package.json"])
-            deps = set(pkg.get("dependencies", {}).keys()) | set(pkg.get("devDependencies", {}).keys())
+            deps = set(pkg.get("dependencies", {}).keys()) | set(
+                pkg.get("devDependencies", {}).keys())
             if "react" in deps:
                 tech.add("React")
             if "express" in deps:
@@ -183,7 +185,7 @@ def detect_tech(full: str) -> List[str]:
                 tech.add("Angular")
         except (json.JSONDecodeError, TypeError):
             pass
-    
+
     # Parse requirements.txt for Python frameworks
     if f["requirements.txt"]:
         for line in f["requirements.txt"].splitlines():
@@ -196,26 +198,27 @@ def detect_tech(full: str) -> List[str]:
                 tech.add("Django")
             if "tensorflow" in line or "torch" in line:
                 tech.add("Machine Learning")
-    
+
     # Parse pyproject.toml for Python
     if f["pyproject.toml"]:
         try:
             import tomllib
             data = tomllib.loads(f["pyproject.toml"])
-            deps = data.get("tool", {}).get("poetry", {}).get("dependencies", {})
+            deps = data.get("tool", {}).get(
+                "poetry", {}).get("dependencies", {})
             for dep in deps:
                 if "fastapi" in dep.lower():
                     tech.add("FastAPI")
                 # Add more as needed
         except ImportError:
             pass  # tomllib not available in older Python
-    
+
     # Keyword search in all files
     blob = " ".join((v or "") for v in f.values())
     for kw, label in KWS:
         if re.search(kw, blob, re.I):
             tech.add(label)
-    
+
     return sorted(tech)
 
 # ---------- Rendering ----------
@@ -270,17 +273,43 @@ def md_overall(lang_total: Dict[str, int], tech_presence: Dict[str, int], repo_c
         f"| {escape(k)} | {v * 100.0 / lang_sum:5.1f}% {bar(v * 100.0 / lang_sum, BAR_W_OVERALL)} |"
         for k, v in lang_rows
     )
-    # Tech adoption Top-N
-    tech_rows = sorted(tech_presence.items(),
-                       key=lambda kv: kv[1], reverse=True)[:TOP_TECHS]
+
+    # Tech adoption Top-N (exclude Java, Spring Boot, Python)
+    excluded_techs = {"Java", "Spring Boot", "Python"}
+    tech_rows = sorted(
+        [(k, v) for k, v in tech_presence.items() if k not in excluded_techs],
+        key=lambda kv: kv[1],
+        reverse=True
+    )[:TOP_TECHS]
+
     tech_md = "| Tech | Adoption |\n|---|---:|\n" + "\n".join(
         f"| {escape(k)} | {(v * 100.0 / max(1, repo_cnt)):5.1f}% {bar(v * 100.0 / max(1, repo_cnt), BAR_W_OVERALL)} |"
         for k, v in tech_rows
     )
+
     note = "<sub>Note: GitHub counts `.tf` as HCL; shown as Terraform for readability.</sub>"
-    return "Languages (by bytes across selected repos)\n\n" + lang_md + \
-           "\n\nTech adoption (share of selected repos)\n\n" + tech_md + \
-           "\n\n" + note
+
+    # Create side-by-side tables using HTML
+    return f"""<table>
+<tr>
+<td valign="top">
+
+**Languages (by bytes across selected repos)**
+
+{lang_md}
+
+</td>
+<td valign="top">
+
+**Tech adoption (share of selected repos)**
+
+{tech_md}
+
+</td>
+</tr>
+</table>
+
+{note}"""
 
 
 def write_block(txt: str, start: str, end: str, body: str) -> str:
