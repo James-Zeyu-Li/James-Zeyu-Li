@@ -54,8 +54,8 @@ You can click the Preview link to take a look at your changes.
 |---|---:|
 | MySQL |  50.0% █████░░░░░ |
 | AWS |  50.0% █████░░░░░ |
-| Redis |  33.3% ███░░░░░░░ |
 | RabbitMQ |  33.3% ███░░░░░░░ |
+| Redis |  33.3% ███░░░░░░░ |
 | Computer Systems |  33.3% ███░░░░░░░ |
 
 </td>
