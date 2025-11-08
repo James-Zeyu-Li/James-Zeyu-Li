@@ -276,7 +276,7 @@ def md_overall(lang_total: Dict[str, int], tech_presence: Dict[str, int], repo_c
 
     # Tech adoption Top-N (exclude Java, Spring Boot, Python)
     excluded_techs = {"Java", "Spring Boot", "Python"}
-    
+
     # Custom priority for tech sorting (higher priority = appears first when percentages are equal)
     tech_priority = {
         "Kafka": 10,
@@ -290,12 +290,13 @@ def md_overall(lang_total: Dict[str, int], tech_presence: Dict[str, int], repo_c
         "Terraform": 2,
         "Computer Systems": 1,
     }
-    
+
     def sort_key(item):
         tech_name, count = item
         priority = tech_priority.get(tech_name, 0)
-        return (-count, -priority, tech_name)  # Sort by count desc, then priority desc, then name asc
-    
+        # Sort by count desc, then priority desc, then name asc
+        return (-count, -priority, tech_name)
+
     tech_rows = sorted(
         [(k, v) for k, v in tech_presence.items() if k not in excluded_techs],
         key=sort_key
