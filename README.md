@@ -44,6 +44,7 @@ You can click the Preview link to take a look at your changes.
 | Shell |   9.2% █░░░░░░░░░ |
 | Python |   7.5% █░░░░░░░░░ |
 | Terraform (HCL) |   7.1% █░░░░░░░░░ |
+| Go |   0.8% ░░░░░░░░░░ |
 
 </td>
 <td valign="top">
@@ -52,11 +53,12 @@ You can click the Preview link to take a look at your changes.
 
 | Tech | Adoption |
 |---|---:|
-| MySQL |  50.0% █████░░░░░ |
-| AWS |  50.0% █████░░░░░ |
-| RabbitMQ |  33.3% ███░░░░░░░ |
-| Redis |  33.3% ███░░░░░░░ |
-| Computer Systems |  33.3% ███░░░░░░░ |
+| MySQL |  50.0% █████░░░░░ (3/6) |
+| AWS |  50.0% █████░░░░░ (3/6) |
+| Redis |  33.3% ███░░░░░░░ (2/6) |
+| RabbitMQ |  33.3% ███░░░░░░░ (2/6) |
+| Computer Systems |  33.3% ███░░░░░░░ (2/6) |
+| Kafka |  16.7% ██░░░░░░░░ (1/6) |
 
 </td>
 </tr>
