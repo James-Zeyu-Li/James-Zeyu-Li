@@ -21,6 +21,7 @@ You can click the Preview link to take a look at your changes.
 | Project | Tech | Code mix |
 |---|---|---|
 | [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | AWS · Java · Kafka · MySQL · Redis · +1 | Java 78.6% ████████░░ / Shell 18.5% ██░░░░░░░░ |
+| [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | AWS · Java · MySQL · RabbitMQ · Redis · +2 | Java 51.9% █████░░░░░ / Terraform (HCL) 37.6% ████░░░░░░ |
 | [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
 | [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | AWS · MySQL · RabbitMQ | Java 95.7% ██████████ / Go  3.1% ░░░░░░░░░░ |
 | [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | Computer Systems | C++ 89.0% █████████░ / Python  9.9% █░░░░░░░░░ |
@@ -30,33 +31,36 @@ You can click the Preview link to take a look at your changes.
 ## Tech Stack Overview
 
 <!--TECH-OVERALL:START-->
-Languages (by bytes across selected repos)
+<table>
+<tr>
+<td valign="top">
+
+**Languages (by bytes across selected repos)**
 
 | Language | Share |
 |---|---:|
-| Java |  53.7% █████░░░░░ |
-| C++ |  25.3% ███░░░░░░░ |
-| Shell |   9.3% █░░░░░░░░░ |
-| Python |   9.2% █░░░░░░░░░ |
-| Go |   1.0% ░░░░░░░░░░ |
-| Lua |   0.5% ░░░░░░░░░░ |
-| CMake |   0.3% ░░░░░░░░░░ |
-| C# |   0.2% ░░░░░░░░░░ |
+| Java |  53.4% █████░░░░░ |
+| C++ |  20.6% ██░░░░░░░░ |
+| Shell |   9.2% █░░░░░░░░░ |
+| Python |   7.5% █░░░░░░░░░ |
+| Terraform (HCL) |   7.1% █░░░░░░░░░ |
 
-Tech adoption (share of selected repos)
+</td>
+<td valign="top">
+
+**Tech adoption (share of selected repos)**
 
 | Tech | Adoption |
 |---|---:|
-| AWS |  40.0% ████░░░░░░ |
-| MySQL |  40.0% ████░░░░░░ |
-| Computer Systems |  40.0% ████░░░░░░ |
-| Spring Boot |  20.0% ██░░░░░░░░ |
-| Java |  20.0% ██░░░░░░░░ |
-| Kafka |  20.0% ██░░░░░░░░ |
-| Redis |  20.0% ██░░░░░░░░ |
-| gRPC |  20.0% ██░░░░░░░░ |
-| Next.js |  20.0% ██░░░░░░░░ |
-| Flask |  20.0% ██░░░░░░░░ |
+| MySQL |  50.0% █████░░░░░ |
+| AWS |  50.0% █████░░░░░ |
+| Redis |  33.3% ███░░░░░░░ |
+| RabbitMQ |  33.3% ███░░░░░░░ |
+| Computer Systems |  33.3% ███░░░░░░░ |
+
+</td>
+</tr>
+</table>
 
 <sub>Note: GitHub counts `.tf` as HCL; shown as Terraform for readability.</sub>
 <!--TECH-OVERALL:END-->
