@@ -72,8 +72,8 @@ OVR_START, OVR_END = "<!--TECH-OVERALL:START-->", "<!--TECH-OVERALL:END-->"
 README = "README.md"
 
 # ===== Rendering params =====
-TOP_LANGS = 5
-TOP_TECHS = 5
+TOP_LANGS = 6
+TOP_TECHS = 6
 BAR_W_PROJECT = 10
 BAR_W_OVERALL = 10
 TECH_PER_ROW = 5
@@ -280,8 +280,8 @@ def md_overall(lang_total: Dict[str, int], tech_presence: Dict[str, int], repo_c
     # Custom priority for tech sorting (higher priority = appears first when percentages are equal)
     tech_priority = {
         "Kafka": 10,
-        "RabbitMQ": 9,
-        "Redis": 8,
+        "Redis": 9,
+        "RabbitMQ": 8,
         "MySQL": 7,
         "MongoDB": 6,
         "AWS": 5,
@@ -303,7 +303,7 @@ def md_overall(lang_total: Dict[str, int], tech_presence: Dict[str, int], repo_c
     )[:TOP_TECHS]
 
     tech_md = "| Tech | Adoption |\n|---|---:|\n" + "\n".join(
-        f"| {escape(k)} | {(v * 100.0 / max(1, repo_cnt)):5.1f}% {bar(v * 100.0 / max(1, repo_cnt), BAR_W_OVERALL)} |"
+        f"| {escape(k)} | {(v * 100.0 / max(1, repo_cnt)):5.1f}% {bar(v * 100.0 / max(1, repo_cnt), BAR_W_OVERALL)} ({v}/{repo_cnt}) |"
         for k, v in tech_rows
     )
 
