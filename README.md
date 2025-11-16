@@ -21,7 +21,7 @@ You can click the Preview link to take a look at your changes.
 | Project | Tech | Code mix |
 |---|---|---|
 | [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | AWS · Java · Kafka · MySQL · Redis · +1 | Java 78.6% ████████░░ / Shell 18.5% ██░░░░░░░░ |
-| [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | AWS · Java · MySQL · RabbitMQ · Redis · +2 | Java 51.9% █████░░░░░ / Terraform (HCL) 37.6% ████░░░░░░ |
+| [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | AWS · Java · Kafka · MySQL · Redis · +2 | Java 48.0% █████░░░░░ / Terraform (HCL) 34.3% ███░░░░░░░ |
 | [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
 | [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | AWS · MySQL · RabbitMQ | Java 95.7% ██████████ / Go  3.1% ░░░░░░░░░░ |
 | [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | Computer Systems | C++ 89.0% █████████░ / Python  9.9% █░░░░░░░░░ |
@@ -39,11 +39,11 @@ You can click the Preview link to take a look at your changes.
 
 | Language | Share |
 |---|---:|
-| Java |  53.4% █████░░░░░ |
-| C++ |  20.6% ██░░░░░░░░ |
-| Shell |   9.2% █░░░░░░░░░ |
-| Python |   7.5% █░░░░░░░░░ |
-| Terraform (HCL) |   7.1% █░░░░░░░░░ |
+| Java |  52.6% █████░░░░░ |
+| C++ |  20.2% ██░░░░░░░░ |
+| Shell |  10.2% █░░░░░░░░░ |
+| Python |   7.8% █░░░░░░░░░ |
+| Terraform (HCL) |   6.9% █░░░░░░░░░ |
 | Go |   0.8% ░░░░░░░░░░ |
 
 </td>
@@ -55,10 +55,10 @@ You can click the Preview link to take a look at your changes.
 |---|---:|
 | MySQL |  50.0% █████░░░░░ (3/6) |
 | AWS |  50.0% █████░░░░░ (3/6) |
+| Kafka |  33.3% ███░░░░░░░ (2/6) |
 | Redis |  33.3% ███░░░░░░░ (2/6) |
-| RabbitMQ |  33.3% ███░░░░░░░ (2/6) |
 | Computer Systems |  33.3% ███░░░░░░░ (2/6) |
-| Kafka |  16.7% ██░░░░░░░░ (1/6) |
+| RabbitMQ |  16.7% ██░░░░░░░░ (1/6) |
 
 </td>
 </tr>
