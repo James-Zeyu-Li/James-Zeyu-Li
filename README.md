@@ -20,7 +20,7 @@ You can click the Preview link to take a look at your changes.
 <!--TECH-PROJECTS:START-->
 | Project | Tech | Code mix |
 |---|---|---|
-| [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | AWS · Java · Kafka · MySQL · Redis · +1 | Java 78.6% ████████░░ / Shell 18.5% ██░░░░░░░░ |
+| [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | AWS · Java · Kafka · MySQL · Redis · +1 | Java 76.3% ████████░░ / Shell 17.3% ██░░░░░░░░ |
 | [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | AWS · Java · Kafka · MySQL · Redis · +2 | Java 48.0% █████░░░░░ / Terraform (HCL) 34.3% ███░░░░░░░ |
 | [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
 | [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | AWS · MySQL · RabbitMQ | Java 95.7% ██████████ / Go  3.1% ░░░░░░░░░░ |
@@ -39,12 +39,12 @@ You can click the Preview link to take a look at your changes.
 
 | Language | Share |
 |---|---:|
-| Java |  52.6% █████░░░░░ |
-| C++ |  20.2% ██░░░░░░░░ |
-| Shell |  10.2% █░░░░░░░░░ |
-| Python |   7.8% █░░░░░░░░░ |
-| Terraform (HCL) |   6.9% █░░░░░░░░░ |
-| Go |   0.8% ░░░░░░░░░░ |
+| Java |  52.4% █████░░░░░ |
+| C++ |  19.9% ██░░░░░░░░ |
+| Shell |  10.1% █░░░░░░░░░ |
+| Python |   7.7% █░░░░░░░░░ |
+| Terraform (HCL) |   6.8% █░░░░░░░░░ |
+| C# |   1.0% ░░░░░░░░░░ |
 
 </td>
 <td valign="top">
