@@ -65,7 +65,7 @@ TECH_OVERRIDE: Dict[str, List[str]] = {
     "ConcurrencyTesting": ["Computer Systems"],
     "VirtualMemorySimulator": ["Computer Systems"],
     "timeLine": ["Swift", "iOS", "SwiftUI", "UIKit", "Combine", "WidgetKit"],
-    "Ticketing-Cloud-Deployment": ["SNS", "SQS", "ElastiCache", "Aurora", "AWS", "Terraform", "Java", "Spring Boot"],
+    "Ticketing-Cloud-Deployment": ["VPC", "CloudWatch", "NAT Gateway", "SNS", "SQS", "ElastiCache", "Aurora", "AWS", "Terraform", "Java", "Spring Boot"],
 }
 
 # ===== README anchors (two blocks only) =====
@@ -89,10 +89,13 @@ TECH_PRIORITY = {
     "UIKit": 12,
     "Combine": 11,
     "WidgetKit": 11,
+    "VPC": 10,
+    "CloudWatch": 10,
     "SNS": 10,
     "SQS": 10,
     "ElastiCache": 10,
     "Aurora": 10,
+    "NAT Gateway": 9,
     "Kafka": 10,
     "Redis": 9,
     "RabbitMQ": 8,
@@ -168,6 +171,7 @@ KWS = [
     (r'\bspring-boot\b', "Spring Boot"), (r'\bgin-gonic/gin\b', "Gin"),
     (r'\bsns\b', "SNS"), (r'\bsqs\b', "SQS"),
     (r'\belasticache\b', "ElastiCache"), (r'\baurora\b', "Aurora"),
+    (r'\bvpc\b', "VPC"), (r'\bcloudwatch\b', "CloudWatch"), (r'\bnat gateway\b', "NAT Gateway"),
     (r'\bswiftui\b', "SwiftUI"), (r'\buikit\b', "UIKit"), (r'\bios\b', "iOS"),
     (r'\bcombine\b', "Combine"), (r'\bwidgetkit\b', "WidgetKit"),
     (r'\bxctest\b', "XCTest"), (r'\bmvvm\b', "MVVM"),
