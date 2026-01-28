@@ -398,12 +398,12 @@ def main() -> None:
             tech_presence[t] += 1
 
     projects_md = md_projects(rows)
-    overall_md = md_overall(lang_total, tech_presence, len(selected))
+    # overall_md = md_overall(lang_total, tech_presence, len(selected))
 
     with open(README, "r+", encoding="utf-8") as f:
         txt = f.read()
         txt = write_block(txt, PJT_START, PJT_END, projects_md)
-        txt = write_block(txt, OVR_START, OVR_END, overall_md)
+        txt = write_block(txt, OVR_START, OVR_END, "")  # Remove the overall stats section
         f.seek(0)
         f.write(txt)
         f.truncate()
