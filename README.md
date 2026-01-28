@@ -12,7 +12,7 @@
 
 ---
 
-### ⚡ Tech Stack
+### Tech Stack
 
 **Languages**
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=flat&logo=openjdk&logoColor=white)
@@ -36,7 +36,7 @@
 
 ---
 
-### 🚀 Recent Projects
+### Recent Projects
 
 <!--TECH-PROJECTS:START-->
 | Project | Tech | Code mix |
@@ -50,16 +50,5 @@
 | [VirtualMemorySimulator](https://github.com/James-Zeyu-Li/VirtualMemorySimulator) | Computer Systems | C++ 79.2% ████████░░ / Python 18.0% ██░░░░░░░░ |
 <!--TECH-PROJECTS:END-->
 
----
-
-### 📊 GitHub Stats
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=james-zeyu-li&show_icons=true&theme=minimal&hide_border=true" alt="Zeyu's Github Stats" />
-  <!-- Top Langs service is currently timing out (HTTP 500)
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=james-zeyu-li&layout=compact&theme=minimal&hide_border=true&exclude_repo=James-Zeyu-Li" alt="Top Langs" />
-  -->
-</p>
-
 <!--TECH-OVERALL:START-->
-
 <!--TECH-OVERALL:END-->
