@@ -2,7 +2,6 @@
 <h3 align="center">Backend & Distributed Systems Enthusiast</h3>
 
 <p align="center">
-  <a href="https://zeyujames.vercel.app/">Portfolio</a> •
   <a href="https://www.linkedin.com/in/zeyujames">LinkedIn</a>
 </p>
 
