@@ -33,39 +33,6 @@ You can click the Preview link to take a look at your changes.
 ## Tech Stack Overview
 
 <!--TECH-OVERALL:START-->
-<table>
-<tr>
-<td valign="top">
 
-**Languages (by bytes across selected repos)**
-
-| Language | Share |
-|---|---:|
-| Swift |  49.0% █████░░░░░ |
-| Java |  26.2% ███░░░░░░░ |
-| C++ |   9.9% █░░░░░░░░░ |
-| Shell |   5.0% █░░░░░░░░░ |
-| Python |   4.2% ░░░░░░░░░░ |
-| Terraform (HCL) |   4.2% ░░░░░░░░░░ |
-
-</td>
-<td valign="top">
-
-**Tech adoption (share of selected repos)**
-
-| Tech | Adoption |
-|---|---:|
-| AWS |  42.9% ████░░░░░░ (3/7) |
-| MySQL |  28.6% ███░░░░░░░ (2/7) |
-| Computer Systems |  28.6% ███░░░░░░░ (2/7) |
-| Swift |  14.3% █░░░░░░░░░ (1/7) |
-| iOS |  14.3% █░░░░░░░░░ (1/7) |
-| SwiftUI |  14.3% █░░░░░░░░░ (1/7) |
-
-</td>
-</tr>
-</table>
-
-<sub>Note: GitHub counts `.tf` as HCL; shown as Terraform for readability.</sub>
 <!--TECH-OVERALL:END-->
 
