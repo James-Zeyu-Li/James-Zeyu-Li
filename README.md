@@ -24,10 +24,10 @@ You can click the Preview link to take a look at your changes.
 | [timeLine](https://github.com/James-Zeyu-Li/timeLine) | Swift · iOS · SwiftUI · UIKit · Combine · +1 | Swift 100.0% ██████████ |
 | [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | AWS · Java · Kafka · MySQL · Redis · +1 | Java 76.3% ████████░░ / Shell 17.3% ██░░░░░░░░ |
 | [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | AWS · Java · Kafka · MySQL · Redis · +2 | Java 44.2% ████░░░░░░ / Terraform (HCL) 37.1% ████░░░░░░ |
-| [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | - |
-| [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | - | - |
-| [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | Computer Systems | - |
-| [VirtualMemorySimulator](https://github.com/James-Zeyu-Li/VirtualMemorySimulator) | Computer Systems | - |
+| [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
+| [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | AWS · MySQL · RabbitMQ | Java 95.7% ██████████ / Go  3.1% ░░░░░░░░░░ |
+| [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | Computer Systems | C++ 89.0% █████████░ / Python  9.9% █░░░░░░░░░ |
+| [VirtualMemorySimulator](https://github.com/James-Zeyu-Li/VirtualMemorySimulator) | Computer Systems | C++ 79.2% ████████░░ / Python 18.0% ██░░░░░░░░ |
 <!--TECH-PROJECTS:END-->
 
 ## Tech Stack Overview
@@ -41,12 +41,12 @@ You can click the Preview link to take a look at your changes.
 
 | Language | Share |
 |---|---:|
-| Swift |  68.6% ███████░░░ |
-| Java |  18.9% ██░░░░░░░░ |
-| Terraform (HCL) |   5.8% █░░░░░░░░░ |
-| Shell |   4.6% ░░░░░░░░░░ |
-| Python |   0.8% ░░░░░░░░░░ |
-| C# |   0.7% ░░░░░░░░░░ |
+| Swift |  49.0% █████░░░░░ |
+| Java |  26.2% ███░░░░░░░ |
+| C++ |   9.9% █░░░░░░░░░ |
+| Shell |   5.0% █░░░░░░░░░ |
+| Python |   4.2% ░░░░░░░░░░ |
+| Terraform (HCL) |   4.2% ░░░░░░░░░░ |
 
 </td>
 <td valign="top">
@@ -55,10 +55,10 @@ You can click the Preview link to take a look at your changes.
 
 | Tech | Adoption |
 |---|---:|
+| MySQL |  42.9% ████░░░░░░ (3/7) |
+| AWS |  42.9% ████░░░░░░ (3/7) |
 | Kafka |  28.6% ███░░░░░░░ (2/7) |
 | Redis |  28.6% ███░░░░░░░ (2/7) |
-| MySQL |  28.6% ███░░░░░░░ (2/7) |
-| AWS |  28.6% ███░░░░░░░ (2/7) |
 | Computer Systems |  28.6% ███░░░░░░░ (2/7) |
 | Swift |  14.3% █░░░░░░░░░ (1/7) |
 
