@@ -65,7 +65,7 @@ TECH_OVERRIDE: Dict[str, List[str]] = {
     "ConcurrencyTesting": ["Computer Systems"],
     "VirtualMemorySimulator": ["Computer Systems"],
     "timeLine": ["Swift", "iOS", "SwiftUI", "UIKit", "Combine", "WidgetKit"],
-    "Ticketing-Cloud-Deployment": ["VPC", "CloudWatch", "NAT Gateway", "SNS", "SQS", "ElastiCache", "Aurora", "AWS", "Terraform", "Java", "Spring Boot"],
+    "Ticketing-Cloud-Deployment": ["VPC", "CloudWatch", "NAT Gateway", "SNS", "SQS", "ElastiCache", "Aurora", "AWS", "Terraform"],
 }
 
 # ===== README anchors (two blocks only) =====
@@ -379,11 +379,14 @@ def main() -> None:
     for r in selected:
         full = r["full_name"]
 
-        # 1) Tech override (replace). Switch to "append" if needed (see TECH_OVERRIDE note above).
-        techs = TECH_OVERRIDE.get(r["name"]) or detect_tech(full)
-        
-        # Sort project techs by priority (High to Low), then alphabetical
-        techs.sort(key=lambda t: (-TECH_PRIORITY.get(t, 0), t))
+        # 1) Tech override (replace).
+        if r["name"] in TECH_OVERRIDE:
+            techs = TECH_OVERRIDE[r["name"]]
+            # For overrides, we respect the manual order provided in the list
+        else:
+            techs = detect_tech(full)
+            # Sort auto-detected techs by priority (High to Low), then alphabetical
+            techs.sort(key=lambda t: (-TECH_PRIORITY.get(t, 0), t))
 
         # 2) Languages with alias normalization (HCL -> Terraform (HCL))
         langs_raw = get_languages(full)
