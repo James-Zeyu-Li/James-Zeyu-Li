@@ -10,8 +10,9 @@ You can click the Preview link to take a look at your changes.
   - LinkedIn: www.linkedin.com/in/zeyujames
 
 ## Technical Skills
-- **Programming Languages**: Java, Python, Golang, C++, SQL, HTML, CSS
-- **Frameworks and APIs**: Java SpringBoot, Go Gin, Flask, RESTful API, Microservices, gRPC
+- **Programming Languages**: Java, Python, Golang, C++, Swift (Advanced), SQL, HTML, CSS
+- **Frameworks and APIs**: SwiftUI, Combine, WidgetKit, XCTest, UIKit, Java SpringBoot, Go Gin, Flask, RESTful API, Microservices, gRPC
+- **Architecture & Design**: MVVM, Clean Architecture, Modular Design (SPM)
 - **Databases and Messaging**: MySQL, MongoDB, DynamoDB, Redis, RabbitMQ, Apache Kafka
 - **Cloud and Infrastructure**: AWS (EC2, ECR, ECS, Lambda, RDS, S3), Terraform, Docker, Linux, Git, Maven
 

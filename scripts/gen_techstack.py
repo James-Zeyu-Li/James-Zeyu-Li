@@ -48,7 +48,7 @@ INCLUDE_REPOS: List[str] = [
     # "CS6650_2025_TA",
     # "LocalSimulationKG",
     # "CS6650_scalable_distributed",
-
+    "timeLine",
     "High-Concurrency-CQRS-Ticketing-Platform",
     "Ticketing-Cloud-Deployment",
     "CedarArbutusCode",
@@ -137,9 +137,12 @@ KWS = [
     (r'\bterraform\b', "Terraform"), (r'\bkubernetes|k8s\b', "Kubernetes"),
     (r'\bnginx\b', "Nginx"), (r'\bgrpc\b', "gRPC"),
     (r'\bfastapi\b', "FastAPI"), (r'\bflask\b', "Flask"),
-    (r'\bexpress\b', "Express"), (r'\breact\b',
-                                  "React"), (r'\bnext(\.js)?\b', "Next.js"),
+    (r'\bexpress\b', "Express"), (r'\breact\b', "React"), (r'\bnext(\.js)?\b', "Next.js"),
     (r'\bspring-boot\b', "Spring Boot"), (r'\bgin-gonic/gin\b', "Gin"),
+    (r'\bswiftui\b', "SwiftUI"), (r'\buikit\b', "UIKit"), (r'\bios\b', "iOS"),
+    (r'\bcombine\b', "Combine"), (r'\bwidgetkit\b', "WidgetKit"),
+    (r'\bxctest\b', "XCTest"), (r'\bmvvm\b', "MVVM"),
+    (r'\bspm\b', "SPM"),
 ]
 SCAN_FILES = [
     "go.mod", "go.sum",
@@ -147,7 +150,8 @@ SCAN_FILES = [
     "package.json", "yarn.lock", "pnpm-lock.yaml",
     "requirements.txt", "pyproject.toml", "Pipfile", "environment.yml",
     "Dockerfile", "README.md",
-    "Cargo.toml", "Gemfile", "composer.json", "pubspec.yaml"
+    "Cargo.toml", "Gemfile", "composer.json", "pubspec.yaml",
+    "Package.swift", "project.pbxproj"
 ]
 
 
@@ -166,6 +170,8 @@ def detect_tech(full: str) -> List[str]:
         tech.add("Python")
     if f["Dockerfile"]:
         tech.add("Docker")
+    if f["Package.swift"] or f["project.pbxproj"]:
+        tech.update(["Swift", "iOS"])
 
     # Parse package.json for specific frameworks
     if f["package.json"]:
@@ -279,6 +285,11 @@ def md_overall(lang_total: Dict[str, int], tech_presence: Dict[str, int], repo_c
 
     # Custom priority for tech sorting (higher priority = appears first when percentages are equal)
     tech_priority = {
+        "Swift": 15,
+        "iOS": 14,
+        "SwiftUI": 13,
+        "UIKit": 12,
+        "Combine": 11,
         "Kafka": 10,
         "Redis": 9,
         "RabbitMQ": 8,
