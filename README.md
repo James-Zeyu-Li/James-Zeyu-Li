@@ -21,10 +21,10 @@ You can click the Preview link to take a look at your changes.
 <!--TECH-PROJECTS:START-->
 | Project | Tech | Code mix |
 |---|---|---|
-| [timeLine](https://github.com/James-Zeyu-Li/timeLine) | - | Swift 100.0% ██████████ |
+| [timeLine](https://github.com/James-Zeyu-Li/timeLine) | Swift · iOS · SwiftUI · UIKit · Combine · +1 | Swift 100.0% ██████████ |
 | [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | AWS · Java · Kafka · MySQL · Redis · +1 | Java 76.3% ████████░░ / Shell 17.3% ██░░░░░░░░ |
-| [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | AWS · Java · Spring Boot | - |
-| [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | - | - |
+| [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | AWS · Java · Kafka · MySQL · Redis · +2 | Java 44.2% ████░░░░░░ / Terraform (HCL) 37.1% ████░░░░░░ |
+| [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | - |
 | [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | - | - |
 | [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | Computer Systems | - |
 | [VirtualMemorySimulator](https://github.com/James-Zeyu-Li/VirtualMemorySimulator) | Computer Systems | - |
@@ -41,12 +41,12 @@ You can click the Preview link to take a look at your changes.
 
 | Language | Share |
 |---|---:|
-| Swift |  81.4% ████████░░ |
-| Java |  14.2% █░░░░░░░░░ |
-| Shell |   3.2% ░░░░░░░░░░ |
-| C# |   0.8% ░░░░░░░░░░ |
-| Lua |   0.3% ░░░░░░░░░░ |
-| Dockerfile |   0.0% ░░░░░░░░░░ |
+| Swift |  68.6% ███████░░░ |
+| Java |  18.9% ██░░░░░░░░ |
+| Terraform (HCL) |   5.8% █░░░░░░░░░ |
+| Shell |   4.6% ░░░░░░░░░░ |
+| Python |   0.8% ░░░░░░░░░░ |
+| C# |   0.7% ░░░░░░░░░░ |
 
 </td>
 <td valign="top">
@@ -55,11 +55,12 @@ You can click the Preview link to take a look at your changes.
 
 | Tech | Adoption |
 |---|---:|
+| Kafka |  28.6% ███░░░░░░░ (2/7) |
+| Redis |  28.6% ███░░░░░░░ (2/7) |
+| MySQL |  28.6% ███░░░░░░░ (2/7) |
 | AWS |  28.6% ███░░░░░░░ (2/7) |
 | Computer Systems |  28.6% ███░░░░░░░ (2/7) |
-| Kafka |  14.3% █░░░░░░░░░ (1/7) |
-| Redis |  14.3% █░░░░░░░░░ (1/7) |
-| MySQL |  14.3% █░░░░░░░░░ (1/7) |
+| Swift |  14.3% █░░░░░░░░░ (1/7) |
 
 </td>
 </tr>
