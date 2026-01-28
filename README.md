@@ -23,7 +23,7 @@ You can click the Preview link to take a look at your changes.
 |---|---|---|
 | [timeLine](https://github.com/James-Zeyu-Li/timeLine) | Swift · iOS · SwiftUI · UIKit · Combine · WidgetKit | Swift 100.0% ██████████ |
 | [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | Kafka · Redis · MySQL · AWS · Java · Spring Boot | Java 76.3% ████████░░ / Shell 17.3% ██░░░░░░░░ |
-| [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | VPC · CloudWatch · NAT Gateway · SNS · SQS · ElastiCache · Aurora · AWS · +1 | Java 44.2% ████░░░░░░ / Terraform (HCL) 37.1% ████░░░░░░ |
+| [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | VPC · CloudWatch · ECS · NAT Gateway · SNS · SQS · ElastiCache · Aurora · AWS · Terraform | Java 44.2% ████░░░░░░ / Terraform (HCL) 37.1% ████░░░░░░ |
 | [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
 | [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | RabbitMQ · MySQL · AWS | Java 95.7% ██████████ / Go  3.1% ░░░░░░░░░░ |
 | [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | Computer Systems | C++ 89.0% █████████░ / Python  9.9% █░░░░░░░░░ |
