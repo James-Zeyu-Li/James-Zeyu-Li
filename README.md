@@ -23,7 +23,7 @@ You can click the Preview link to take a look at your changes.
 |---|---|---|
 | [timeLine](https://github.com/James-Zeyu-Li/timeLine) | Swift · iOS · SwiftUI · UIKit · Combine · WidgetKit | Swift 100.0% ██████████ |
 | [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | Kafka · Redis · MySQL · AWS · Java · Spring Boot | Java 76.3% ████████░░ / Shell 17.3% ██░░░░░░░░ |
-| [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | Kafka · Redis · MySQL · AWS · Terraform · Java · Spring Boot | Java 44.2% ████░░░░░░ / Terraform (HCL) 37.1% ████░░░░░░ |
+| [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | Aurora · ElastiCache · SNS · SQS · AWS · Terraform · Java · Spring Boot | Java 44.2% ████░░░░░░ / Terraform (HCL) 37.1% ████░░░░░░ |
 | [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
 | [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | RabbitMQ · MySQL · AWS | Java 95.7% ██████████ / Go  3.1% ░░░░░░░░░░ |
 | [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | Computer Systems | C++ 89.0% █████████░ / Python  9.9% █░░░░░░░░░ |
@@ -55,12 +55,12 @@ You can click the Preview link to take a look at your changes.
 
 | Tech | Adoption |
 |---|---:|
-| MySQL |  42.9% ████░░░░░░ (3/7) |
 | AWS |  42.9% ████░░░░░░ (3/7) |
-| Kafka |  28.6% ███░░░░░░░ (2/7) |
-| Redis |  28.6% ███░░░░░░░ (2/7) |
+| MySQL |  28.6% ███░░░░░░░ (2/7) |
 | Computer Systems |  28.6% ███░░░░░░░ (2/7) |
 | Swift |  14.3% █░░░░░░░░░ (1/7) |
+| iOS |  14.3% █░░░░░░░░░ (1/7) |
+| SwiftUI |  14.3% █░░░░░░░░░ (1/7) |
 
 </td>
 </tr>
