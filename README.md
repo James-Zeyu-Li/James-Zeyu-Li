@@ -54,8 +54,10 @@
 
 ### 📊 GitHub Stats
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=James-Zeyu-Li&show_icons=true&theme=minimal&hide_border=true" alt="Zeyu's Github Stats" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=James-Zeyu-Li&layout=compact&theme=minimal&hide_border=true&exclude_repo=James-Zeyu-Li" alt="Top Langs" />
+  <img src="https://github-readme-stats.vercel.app/api?username=james-zeyu-li&show_icons=true&theme=minimal&hide_border=true" alt="Zeyu's Github Stats" />
+  <!-- Top Langs service is currently timing out (HTTP 500)
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=james-zeyu-li&layout=compact&theme=minimal&hide_border=true&exclude_repo=James-Zeyu-Li" alt="Top Langs" />
+  -->
 </p>
 
 <!--TECH-OVERALL:START-->
