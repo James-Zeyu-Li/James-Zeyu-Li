@@ -64,6 +64,7 @@ INCLUDE_REPOS: List[str] = [
 TECH_OVERRIDE: Dict[str, List[str]] = {
     "ConcurrencyTesting": ["Computer Systems"],
     "VirtualMemorySimulator": ["Computer Systems"],
+    "timeLine": ["Swift", "iOS", "SwiftUI", "UIKit", "Combine", "WidgetKit"],
 }
 
 # ===== README anchors (two blocks only) =====
