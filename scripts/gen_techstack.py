@@ -77,7 +77,28 @@ TOP_LANGS = 6
 TOP_TECHS = 6
 BAR_W_PROJECT = 10
 BAR_W_OVERALL = 10
-TECH_PER_ROW = 5
+TECH_PER_ROW = 8
+
+# ===== Tech Priority (Global) =====
+# Higher priority = appears first in Project Tech list and Tech Adoption table
+TECH_PRIORITY = {
+    "Swift": 15,
+    "iOS": 14,
+    "SwiftUI": 13,
+    "UIKit": 12,
+    "Combine": 11,
+    "WidgetKit": 11,
+    "Kafka": 10,
+    "Redis": 9,
+    "RabbitMQ": 8,
+    "MySQL": 7,
+    "MongoDB": 6,
+    "AWS": 5,
+    "Docker": 4,
+    "Kubernetes": 3,
+    "Terraform": 2,
+    "Computer Systems": 1,
+}
 
 # ===== HTTP =====
 GITHUB = "https://api.github.com"
@@ -284,28 +305,9 @@ def md_overall(lang_total: Dict[str, int], tech_presence: Dict[str, int], repo_c
     # Tech adoption Top-N (exclude Java, Spring Boot, Python)
     excluded_techs = {"Java", "Spring Boot", "Python"}
 
-    # Custom priority for tech sorting (higher priority = appears first when percentages are equal)
-    tech_priority = {
-        "Swift": 15,
-        "iOS": 14,
-        "SwiftUI": 13,
-        "UIKit": 12,
-        "Combine": 11,
-        "Kafka": 10,
-        "Redis": 9,
-        "RabbitMQ": 8,
-        "MySQL": 7,
-        "MongoDB": 6,
-        "AWS": 5,
-        "Docker": 4,
-        "Kubernetes": 3,
-        "Terraform": 2,
-        "Computer Systems": 1,
-    }
-
     def sort_key(item):
         tech_name, count = item
-        priority = tech_priority.get(tech_name, 0)
+        priority = TECH_PRIORITY.get(tech_name, 0)
         # Sort by count desc, then priority desc, then name asc
         return (-count, -priority, tech_name)
 
@@ -368,6 +370,9 @@ def main() -> None:
 
         # 1) Tech override (replace). Switch to "append" if needed (see TECH_OVERRIDE note above).
         techs = TECH_OVERRIDE.get(r["name"]) or detect_tech(full)
+        
+        # Sort project techs by priority (High to Low), then alphabetical
+        techs.sort(key=lambda t: (-TECH_PRIORITY.get(t, 0), t))
 
         # 2) Languages with alias normalization (HCL -> Terraform (HCL))
         langs_raw = get_languages(full)
