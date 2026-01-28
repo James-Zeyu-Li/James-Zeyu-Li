@@ -65,7 +65,7 @@ TECH_OVERRIDE: Dict[str, List[str]] = {
     "ConcurrencyTesting": ["Computer Systems"],
     "VirtualMemorySimulator": ["Computer Systems"],
     "timeLine": ["Swift", "iOS", "SwiftUI", "UIKit", "Combine", "WidgetKit"],
-    "Ticketing-Cloud-Deployment": ["VPC", "CloudWatch", "NAT Gateway", "SNS", "SQS", "ElastiCache", "Aurora", "AWS", "Terraform"],
+    "Ticketing-Cloud-Deployment": ["VPC", "CloudWatch", "ECS", "NAT Gateway", "SNS", "SQS", "ElastiCache", "Aurora", "AWS", "Terraform"],
 }
 
 # ===== README anchors (two blocks only) =====
@@ -78,7 +78,7 @@ TOP_LANGS = 6
 TOP_TECHS = 6
 BAR_W_PROJECT = 10
 BAR_W_OVERALL = 10
-TECH_PER_ROW = 8
+TECH_PER_ROW = 12
 
 # ===== Tech Priority (Global) =====
 # Higher priority = appears first in Project Tech list and Tech Adoption table
@@ -91,6 +91,7 @@ TECH_PRIORITY = {
     "WidgetKit": 11,
     "VPC": 10,
     "CloudWatch": 10,
+    "ECS": 10,
     "SNS": 10,
     "SQS": 10,
     "ElastiCache": 10,
@@ -172,6 +173,7 @@ KWS = [
     (r'\bsns\b', "SNS"), (r'\bsqs\b', "SQS"),
     (r'\belasticache\b', "ElastiCache"), (r'\baurora\b', "Aurora"),
     (r'\bvpc\b', "VPC"), (r'\bcloudwatch\b', "CloudWatch"), (r'\bnat gateway\b', "NAT Gateway"),
+    (r'\becs\b', "ECS"),
     (r'\bswiftui\b', "SwiftUI"), (r'\buikit\b', "UIKit"), (r'\bios\b', "iOS"),
     (r'\bcombine\b', "Combine"), (r'\bwidgetkit\b', "WidgetKit"),
     (r'\bxctest\b', "XCTest"), (r'\bmvvm\b', "MVVM"),
