@@ -104,11 +104,11 @@ TECH_PRIORITY = {
     "MongoDB": 6,
     "AWS": 5,
     "Docker": 4,
-    "Kubernetes": 3,
+    "Kubernetes": 13,
     "Terraform": 2,
     "Computer Systems": 1,
-    "Prometheus": 16,
-    "Grafana": 16,
+    "Prometheus": 10,
+    "Grafana": 10, 
 }
 
 # ===== HTTP =====
