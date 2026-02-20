@@ -101,6 +101,7 @@ TECH_PRIORITY = {
     "Redis": 9,
     "RabbitMQ": 8,
     "MySQL": 7,
+    "PostgreSQL": 10,
     "MongoDB": 6,
     "AWS": 5,
     "Docker": 4,
@@ -166,7 +167,7 @@ def get_languages(full: str) -> Dict[str, int]:
 KWS = [
     (r'\bredis\b', "Redis"),  (r'\bkafka\b', "Kafka"),
     (r'\b(dynamodb|aws dynamodb)\b', "DynamoDB"), (r'\brabbitmq\b', "RabbitMQ"),
-    (r'\bmysql\b', "MySQL"), (r'\bmongodb\b', "MongoDB"), (r'\baws\b', "AWS"),
+    (r'\bmysql\b', "MySQL"), (r'\bpostgres(ql)?\b', "PostgreSQL"), (r'\bmongodb\b', "MongoDB"), (r'\baws\b', "AWS"),
     (r'\bterraform\b', "Terraform"), (r'\bkubernetes|k8s\b', "Kubernetes"),
     (r'\bgrafana\b', "Grafana"), (r'\bprometheus\b', "Prometheus"),
     (r'\bnginx\b', "Nginx"), (r'\bgrpc\b', "gRPC"),
