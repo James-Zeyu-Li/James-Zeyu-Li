@@ -48,14 +48,14 @@ INCLUDE_REPOS: List[str] = [
     # "CS6650_2025_TA",
     # "LocalSimulationKG",
     # "CS6650_scalable_distributed",
-    "timeLine",
+    "VisionRAG-Platform",
     "High-Concurrency-CQRS-Ticketing-Platform",
     "Ticketing-Cloud-Deployment",
     "CedarArbutusCode",
     "DistributedAlbumStorage",
     "ConcurrencyTesting",
     "VirtualMemorySimulator",
-    "profolio_website"
+    "profolio_website",
 ]
 
 # ===== Tech override by repo (exact name match) =====
@@ -107,6 +107,8 @@ TECH_PRIORITY = {
     "Kubernetes": 3,
     "Terraform": 2,
     "Computer Systems": 1,
+    "Prometheus": 16,
+    "Grafana": 16,
 }
 
 # ===== HTTP =====
@@ -166,6 +168,7 @@ KWS = [
     (r'\b(dynamodb|aws dynamodb)\b', "DynamoDB"), (r'\brabbitmq\b', "RabbitMQ"),
     (r'\bmysql\b', "MySQL"), (r'\bmongodb\b', "MongoDB"), (r'\baws\b', "AWS"),
     (r'\bterraform\b', "Terraform"), (r'\bkubernetes|k8s\b', "Kubernetes"),
+    (r'\bgrafana\b', "Grafana"), (r'\bprometheus\b', "Prometheus"),
     (r'\bnginx\b', "Nginx"), (r'\bgrpc\b', "gRPC"),
     (r'\bfastapi\b', "FastAPI"), (r'\bflask\b', "Flask"),
     (r'\bexpress\b', "Express"), (r'\breact\b', "React"), (r'\bnext(\.js)?\b', "Next.js"),
