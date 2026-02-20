@@ -41,7 +41,7 @@
 <!--TECH-PROJECTS:START-->
 | Project | Tech | Code mix |
 |---|---|---|
-| [VisionRAG-Platform](https://github.com/James-Zeyu-Li/VisionRAG-Platform) | Grafana · Prometheus · Redis · RabbitMQ · Kubernetes · Next.js | Go 55.6% ██████░░░░ / Vue 26.0% ███░░░░░░░ |
+| [VisionRAG-Platform](https://github.com/James-Zeyu-Li/VisionRAG-Platform) | Kubernetes · Grafana · Prometheus · Redis · RabbitMQ · Next.js | Go 55.6% ██████░░░░ / Vue 26.0% ███░░░░░░░ |
 | [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | Kafka · Redis · MySQL · AWS · Java · Spring Boot | Java 76.3% ████████░░ / Shell 17.3% ██░░░░░░░░ |
 | [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | VPC · CloudWatch · ECS · NAT Gateway · SNS · SQS · ElastiCache · Aurora · AWS · Terraform | Java 44.2% ████░░░░░░ / Terraform (HCL) 37.1% ████░░░░░░ |
 | [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
