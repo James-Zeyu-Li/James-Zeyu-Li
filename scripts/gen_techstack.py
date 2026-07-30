@@ -145,7 +145,9 @@ def list_owner_repos(user: str) -> Dict[str, dict]:
         time.sleep(0.1)
     keep: Dict[str, dict] = {}
     for r in out:
-        if r.get("fork") or r.get("private") or r.get("archived") or r.get("disabled") or r.get("is_template"):
+        if r.get("fork") or r.get("archived") or r.get("disabled") or r.get("is_template"):
+            continue
+        if r.get("private") and r.get("name") not in INCLUDE_REPOS:
             continue
         keep[r["name"]] = r
     return keep
