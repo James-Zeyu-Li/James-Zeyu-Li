@@ -48,6 +48,7 @@ INCLUDE_REPOS: List[str] = [
     # "CS6650_2025_TA",
     # "LocalSimulationKG",
     # "CS6650_scalable_distributed",
+    "Filmory-Web",
     "VisionRAG-Platform",
     "High-Concurrency-CQRS-Ticketing-Platform",
     "Ticketing-Cloud-Deployment",
@@ -62,6 +63,7 @@ INCLUDE_REPOS: List[str] = [
 # NOTE: override means "replace" (not union). To append instead:
 # techs = sorted(set(detect_tech(full)) | set(TECH_OVERRIDE.get(name, [])))
 TECH_OVERRIDE: Dict[str, List[str]] = {
+    "Filmory-Web": ["Supabase", "Dexie", "React", "TypeScript", "Vite"],
     "ConcurrencyTesting": ["Computer Systems"],
     "VirtualMemorySimulator": ["Computer Systems"],
     "timeLine": ["Swift", "iOS", "SwiftUI", "UIKit", "Combine", "WidgetKit"],
