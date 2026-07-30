@@ -74,7 +74,6 @@ INCLUDE_REPOS: List[str] = [
 TECH_OVERRIDE: Dict[str, List[str]] = {
     "ConcurrencyTesting": ["Computer Systems"],
     "VirtualMemorySimulator": ["Computer Systems"],
-    "timeLine": ["Swift", "iOS", "SwiftUI", "UIKit", "Combine", "WidgetKit"],
     "Ticketing-Cloud-Deployment": ["VPC", "CloudWatch", "ECS", "NAT Gateway", "SNS", "SQS", "ElastiCache", "Aurora", "AWS", "Terraform"],
 }
 
@@ -93,12 +92,6 @@ TECH_PER_ROW = 12
 # ===== Tech Priority (Global) =====
 # Higher priority = appears first in Project Tech list and Tech Adoption table
 TECH_PRIORITY = {
-    "Swift": 15,
-    "iOS": 14,
-    "SwiftUI": 13,
-    "UIKit": 12,
-    "Combine": 11,
-    "WidgetKit": 11,
     "VPC": 10,
     "CloudWatch": 10,
     "ECS": 10,
@@ -196,8 +189,6 @@ KWS = [
     (r'\belasticache\b', "ElastiCache"), (r'\baurora\b', "Aurora"),
     (r'\bvpc\b', "VPC"), (r'\bcloudwatch\b', "CloudWatch"), (r'\bnat gateway\b', "NAT Gateway"),
     (r'\becs\b', "ECS"),
-    (r'\bswiftui\b', "SwiftUI"), (r'\buikit\b', "UIKit"), (r'\bios\b', "iOS"),
-    (r'\bcombine\b', "Combine"), (r'\bwidgetkit\b', "WidgetKit"),
     (r'\bxctest\b', "XCTest"), (r'\bmvvm\b', "MVVM"),
     (r'\bspm\b', "SPM"),
 ]
@@ -208,7 +199,6 @@ SCAN_FILES = [
     "requirements.txt", "pyproject.toml", "Pipfile", "environment.yml",
     "Dockerfile", "README.md",
     "Cargo.toml", "Gemfile", "composer.json", "pubspec.yaml",
-    "Package.swift", "project.pbxproj"
 ]
 
 
@@ -227,8 +217,6 @@ def detect_tech(full: str) -> List[str]:
         tech.add("Python")
     if f["Dockerfile"]:
         tech.add("Docker")
-    if f["Package.swift"] or f["project.pbxproj"]:
-        tech.update(["Swift", "iOS"])
 
     # Parse package.json for specific frameworks
     if f["package.json"]:
