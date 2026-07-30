@@ -25,7 +25,15 @@ import requests
 
 # ===== Basic config =====
 USER: str = os.getenv("PROFILE_USERNAME", "James-Zeyu-Li")
-TOKEN: str = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or ""
+# Optional fine-grained PAT for repositories that are private. In Actions this
+# is supplied as TECHSTACK_READ_TOKEN; GITHUB_TOKEN remains the fallback for
+# public repositories and local runs.
+TOKEN: str = (
+    os.getenv("TECHSTACK_READ_TOKEN")
+    or os.getenv("GITHUB_TOKEN")
+    or os.getenv("GH_TOKEN")
+    or ""
+)
 TIMEOUT = 30
 
 # --- Language alias (GitHub /languages returns "HCL" for .tf) ---
@@ -60,10 +68,10 @@ INCLUDE_REPOS: List[str] = [
 ]
 
 # ===== Tech override by repo (exact name match) =====
-# NOTE: override means "replace" (not union). To append instead:
-# techs = sorted(set(detect_tech(full)) | set(TECH_OVERRIDE.get(name, [])))
+# NOTE: override means "replace" (not union). Keep this for projects whose
+# stack cannot be reliably inferred from repository files. Filmory-Web is
+# intentionally not listed here: its stack is detected from package.json.
 TECH_OVERRIDE: Dict[str, List[str]] = {
-    "Filmory-Web": ["Supabase", "Dexie", "React", "TypeScript", "Vite"],
     "ConcurrencyTesting": ["Computer Systems"],
     "VirtualMemorySimulator": ["Computer Systems"],
     "timeLine": ["Swift", "iOS", "SwiftUI", "UIKit", "Combine", "WidgetKit"],
@@ -113,6 +121,11 @@ TECH_PRIORITY = {
     "Computer Systems": 1,
     "Prometheus": 10,
     "Grafana": 10, 
+    "Supabase": 10,
+    "Dexie": 9,
+    "React": 8,
+    "TypeScript": 7,
+    "Vite": 6,
 }
 
 # ===== HTTP =====
@@ -225,6 +238,16 @@ def detect_tech(full: str) -> List[str]:
                 pkg.get("devDependencies", {}).keys())
             if "react" in deps:
                 tech.add("React")
+            if "@supabase/supabase-js" in deps or any(
+                dep.startswith("@supabase/") for dep in deps
+            ):
+                tech.add("Supabase")
+            if "dexie" in deps:
+                tech.add("Dexie")
+            if "typescript" in deps:
+                tech.add("TypeScript")
+            if "vite" in deps:
+                tech.add("Vite")
             if "express" in deps:
                 tech.add("Express")
             if "next" in deps:

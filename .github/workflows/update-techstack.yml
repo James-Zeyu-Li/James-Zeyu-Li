@@ -27,7 +27,11 @@ jobs:
 
       - name: Generate tech tables
         env:
-          # 默认就有的 token，用于提升 API 配额与回写（与 permissions 搭配）
+          # Optional fine-grained PAT with read access to selected private repos.
+          # Add it in this repository as the TECHSTACK_READ_TOKEN secret.
+          # The checkout token remains responsible for committing README.md.
+          TECHSTACK_READ_TOKEN: ${{ secrets.TECHSTACK_READ_TOKEN }}
+          # Default token: public-repository access and this repository's writes.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PROFILE_USERNAME: ${{ env.PROFILE_USERNAME }}
         run: python scripts/gen_techstack.py
