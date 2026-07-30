@@ -74,6 +74,7 @@ PRIVATE_REPOS = {"Filmory-Web"}
 # stack cannot be reliably inferred from repository files. Filmory-Web is
 # intentionally not listed here: its stack is detected from package.json.
 TECH_OVERRIDE: Dict[str, List[str]] = {
+    "Filmory-Web": ["Supabase (BaaS)", "PostgreSQL", "Dexie", "React", "TypeScript", "Vite"],
     "Ticketing-Cloud-Deployment": ["VPC", "CloudWatch", "ECS", "NAT Gateway", "SNS", "SQS", "ElastiCache", "Aurora", "AWS", "Terraform"],
 }
 
