@@ -27,11 +27,11 @@ jobs:
 
       - name: Generate tech tables
         env:
-          # Optional fine-grained PAT with read access to selected private repos.
-          # Add it in this repository as the TECHSTACK_READ_TOKEN secret.
-          # The checkout token remains responsible for committing README.md.
-          TECHSTACK_READ_TOKEN: ${{ secrets.TECHSTACK_READ_TOKEN }}
-          # Default token: public-repository access and this repository's writes.
+          # Read-only fine-grained PAT for Filmory-Web only. It is used solely
+          # for GitHub API requests; actions/checkout retains GITHUB_TOKEN for
+          # committing README.md.
+          FILMORY_ACCESS_KEY: ${{ secrets.FILMORY_ACCESS_KEY }}
+          # Used for public GitHub API requests and committing README.md.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PROFILE_USERNAME: ${{ env.PROFILE_USERNAME }}
         run: python scripts/gen_techstack.py

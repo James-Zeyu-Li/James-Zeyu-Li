@@ -25,11 +25,11 @@ import requests
 
 # ===== Basic config =====
 USER: str = os.getenv("PROFILE_USERNAME", "James-Zeyu-Li")
-# Optional fine-grained PAT for repositories that are private. In Actions this
-# is supplied as TECHSTACK_READ_TOKEN; GITHUB_TOKEN remains the fallback for
-# public repositories and local runs.
+# FILMORY_ACCESS_KEY is a fine-grained, read-only PAT that is restricted to
+# Filmory-Web. It takes precedence for API reads; GITHUB_TOKEN still commits
+# README.md through actions/checkout.
 TOKEN: str = (
-    os.getenv("TECHSTACK_READ_TOKEN")
+    os.getenv("FILMORY_ACCESS_KEY")
     or os.getenv("GITHUB_TOKEN")
     or os.getenv("GH_TOKEN")
     or ""
@@ -62,18 +62,18 @@ INCLUDE_REPOS: List[str] = [
     "Ticketing-Cloud-Deployment",
     "CedarArbutusCode",
     "DistributedAlbumStorage",
-    "ConcurrencyTesting",
-    "VirtualMemorySimulator",
     "profolio_website",
 ]
+
+# Private repositories allowed to be scanned. Each requires read access in the
+# corresponding fine-grained PAT; all other private repositories are excluded.
+PRIVATE_REPOS = {"Filmory-Web"}
 
 # ===== Tech override by repo (exact name match) =====
 # NOTE: override means "replace" (not union). Keep this for projects whose
 # stack cannot be reliably inferred from repository files. Filmory-Web is
 # intentionally not listed here: its stack is detected from package.json.
 TECH_OVERRIDE: Dict[str, List[str]] = {
-    "ConcurrencyTesting": ["Computer Systems"],
-    "VirtualMemorySimulator": ["Computer Systems"],
     "Ticketing-Cloud-Deployment": ["VPC", "CloudWatch", "ECS", "NAT Gateway", "SNS", "SQS", "ElastiCache", "Aurora", "AWS", "Terraform"],
 }
 
@@ -151,11 +151,27 @@ def list_owner_repos(user: str) -> Dict[str, dict]:
         time.sleep(0.1)
     keep: Dict[str, dict] = {}
     for r in out:
-        if r.get("fork") or r.get("archived") or r.get("disabled") or r.get("is_template"):
-            continue
-        if r.get("private") and r.get("name") not in INCLUDE_REPOS:
+        if (
+            (r.get("private") and r.get("name") not in PRIVATE_REPOS)
+            or r.get("fork")
+            or r.get("archived")
+            or r.get("disabled")
+            or r.get("is_template")
+        ):
             continue
         keep[r["name"]] = r
+
+    # A fine-grained PAT may have access to a selected private repository
+    # without returning it in the owner's repository listing. Fetch each
+    # explicitly allowed private repo so the whitelist is reliable.
+    for name in PRIVATE_REPOS:
+        if name in keep:
+            continue
+        r = sess.get(f"{GITHUB}/repos/{user}/{name}", timeout=TIMEOUT)
+        if r.status_code == 200:
+            repo = r.json()
+            if not repo.get("fork") and not repo.get("archived") and not repo.get("disabled"):
+                keep[name] = repo
     return keep
 
 

@@ -55,8 +55,6 @@
 | [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | VPC · CloudWatch · ECS · NAT Gateway · SNS · SQS · ElastiCache · Aurora · AWS · Terraform | Java 44.2% ████░░░░░░ / Terraform (HCL) 37.1% ████░░░░░░ |
 | [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
 | [DistributedAlbumStorage](https://github.com/James-Zeyu-Li/DistributedAlbumStorage) | RabbitMQ · MySQL · AWS | Java 95.7% ██████████ / Go  3.1% ░░░░░░░░░░ |
-| [ConcurrencyTesting](https://github.com/James-Zeyu-Li/ConcurrencyTesting) | Computer Systems | C++ 89.0% █████████░ / Python  9.9% █░░░░░░░░░ |
-| [VirtualMemorySimulator](https://github.com/James-Zeyu-Li/VirtualMemorySimulator) | Computer Systems | C++ 79.2% ████████░░ / Python 18.0% ██░░░░░░░░ |
 <!--TECH-PROJECTS:END-->
 
 <!--TECH-OVERALL:START-->
