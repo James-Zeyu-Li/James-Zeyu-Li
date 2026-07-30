@@ -405,6 +405,16 @@ def main() -> None:
 
     # Preserve the whitelist order
     selected = [repo_map[name] for name in INCLUDE_REPOS if name in repo_map]
+    missing = [name for name in INCLUDE_REPOS if name not in repo_map]
+    print(
+        f"[techstack] Selected {len(selected)}/{len(INCLUDE_REPOS)} "
+        f"whitelisted repositories."
+    )
+    if missing:
+        print(
+            "[techstack] WARNING: These whitelisted repositories were not "
+            f"accessible: {', '.join(missing)}"
+        )
 
     rows: List[Dict] = []
     lang_total: Dict[str, int] = Counter()
@@ -426,6 +436,13 @@ def main() -> None:
         langs_raw = get_languages(full)
         langs = normalize_langs(langs_raw)
 
+        tech_log = ", ".join(techs) if techs else "-"
+        lang_log = ", ".join(
+            f"{name}={value}" for name, value in
+            sorted(langs.items(), key=lambda item: item[1], reverse=True)
+        ) or "-"
+        print(f"[techstack] {r['name']} | tech: {tech_log} | languages: {lang_log}")
+
         rows.append(
             {"name": r["name"], "url": r["html_url"], "tech": techs, "lang": langs})
 
@@ -444,6 +461,8 @@ def main() -> None:
         f.seek(0)
         f.write(txt)
         f.truncate()
+
+    print(f"[techstack] Updated {README} with {len(rows)} project rows.")
 
 
 if __name__ == "__main__":
