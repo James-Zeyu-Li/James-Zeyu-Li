@@ -49,13 +49,8 @@
 <!--TECH-PROJECTS:START-->
 | Project | Tech | Code mix |
 |---|---|---|
-<<<<<<< Updated upstream
-| [Filmory-Web](https://github.com/James-Zeyu-Li/Filmory-Web) | PostgreSQL · React | TypeScript 85.1% █████████░ / CSS 11.7% █░░░░░░░░░ |
+| [Filmory-Web](https://github.com/James-Zeyu-Li/Filmory-Web) | Supabase (BaaS) · PostgreSQL · Dexie · React · TypeScript · Vite | TypeScript 85.1% █████████░ / CSS 11.7% █░░░░░░░░░ |
 | [VisionRAG-Platform](https://github.com/James-Zeyu-Li/VisionRAG-Platform) | Kubernetes · Helm · Grafana · Prometheus · PostgreSQL · Redis · RabbitMQ · React | Go 52.4% █████░░░░░ / Python 21.4% ██░░░░░░░░ |
-=======
-| [Filmory-Web](https://github.com/James-Zeyu-Li/Filmory-Web) | Supabase (BaaS) · PostgreSQL · Dexie · React · TypeScript · Vite | - |
-| [VisionRAG-Platform](https://github.com/James-Zeyu-Li/VisionRAG-Platform) | Kubernetes · Helm · Grafana · Prometheus · PostgreSQL · Redis · RabbitMQ · Next.js | Go 49.6% █████░░░░░ / Vue 23.2% ██░░░░░░░░ |
->>>>>>> Stashed changes
 | [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | Kafka · Redis · MySQL · AWS · Java · Spring Boot | Java 76.3% ████████░░ / Shell 17.3% ██░░░░░░░░ |
 | [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | VPC · CloudWatch · ECS · NAT Gateway · SNS · SQS · ElastiCache · Aurora · AWS · Terraform | Java 44.2% ████░░░░░░ / Terraform (HCL) 37.1% ████░░░░░░ |
 | [CedarArbutusCode](https://github.com/James-Zeyu-Li/CedarArbutusCode) | Flask · Next.js · Nginx · gRPC | Python 57.6% ██████░░░░ / Shell 42.4% ████░░░░░░ |
