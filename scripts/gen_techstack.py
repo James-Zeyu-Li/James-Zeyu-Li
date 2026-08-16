@@ -26,14 +26,10 @@ import requests
 # ===== Basic config =====
 USER: str = os.getenv("PROFILE_USERNAME", "James-Zeyu-Li")
 # FILMORY_ACCESS_KEY is a fine-grained, read-only PAT that is restricted to
-# Filmory-Web. It takes precedence for API reads; GITHUB_TOKEN still commits
-# README.md through actions/checkout.
-TOKEN: str = (
-    os.getenv("FILMORY_ACCESS_KEY")
-    or os.getenv("GITHUB_TOKEN")
-    or os.getenv("GH_TOKEN")
-    or ""
-)
+# Filmory-Web. GITHUB_TOKEN/GH_TOKEN is the default token used for public
+# API requests and general repository listing.
+GLOBAL_TOKEN: str = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN") or ""
+FILMORY_TOKEN: str = os.getenv("FILMORY_ACCESS_KEY") or ""
 TIMEOUT = 30
 
 # --- Language alias (GitHub /languages returns "HCL" for .tf) ---
@@ -124,15 +120,21 @@ TECH_PRIORITY = {
 
 # ===== HTTP =====
 GITHUB = "https://api.github.com"
-HEAD = {
+BASE_HEAD = {
     "Accept": "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": f"{USER}-tech-agg"
 }
-if TOKEN:
-    HEAD["Authorization"] = f"Bearer {TOKEN}"
+
+def get_auth_headers(repo_name: str = "") -> dict:
+    headers = BASE_HEAD.copy()
+    token = FILMORY_TOKEN if (repo_name == "Filmory-Web" and FILMORY_TOKEN) else GLOBAL_TOKEN
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    return headers
+
 sess = requests.Session()
-sess.headers.update(HEAD)
+sess.headers.update(get_auth_headers())
 
 # ---------- HTTP helpers ----------
 
@@ -142,14 +144,19 @@ def list_owner_repos(user: str) -> Dict[str, dict]:
     out, page = [], 1
     while True:
         url = f"{GITHUB}/users/{user}/repos?type=owner&sort=updated&per_page=100&page={page}"
-        r = sess.get(url, timeout=TIMEOUT)
-        r.raise_for_status()
-        arr = r.json()
-        if not arr:
+        try:
+            r = sess.get(url, timeout=TIMEOUT)
+            r.raise_for_status()
+            arr = r.json()
+            if not arr:
+                break
+            out.extend(arr)
+            page += 1
+            time.sleep(0.1)
+        except Exception as e:
+            print(f"[techstack] WARNING: Failed to list owner repos: {e}")
             break
-        out.extend(arr)
-        page += 1
-        time.sleep(0.1)
+            
     keep: Dict[str, dict] = {}
     for r in out:
         if (
@@ -168,7 +175,8 @@ def list_owner_repos(user: str) -> Dict[str, dict]:
     for name in PRIVATE_REPOS:
         if name in keep:
             continue
-        r = sess.get(f"{GITHUB}/repos/{user}/{name}", timeout=TIMEOUT)
+        headers = get_auth_headers(name)
+        r = sess.get(f"{GITHUB}/repos/{user}/{name}", headers=headers, timeout=TIMEOUT)
         if r.status_code == 200:
             repo = r.json()
             if not repo.get("fork") and not repo.get("archived") and not repo.get("disabled"):
@@ -177,7 +185,9 @@ def list_owner_repos(user: str) -> Dict[str, dict]:
 
 
 def get_file(full: str, path: str) -> Optional[str]:
-    r = sess.get(f"{GITHUB}/repos/{full}/contents/{path}", timeout=15)
+    repo_name = full.split("/")[-1]
+    headers = get_auth_headers(repo_name)
+    r = sess.get(f"{GITHUB}/repos/{full}/contents/{path}", headers=headers, timeout=15)
     if r.status_code != 200:
         return None
     data = r.json()
@@ -187,7 +197,9 @@ def get_file(full: str, path: str) -> Optional[str]:
 
 
 def get_languages(full: str) -> Dict[str, int]:
-    r = sess.get(f"{GITHUB}/repos/{full}/languages", timeout=TIMEOUT)
+    repo_name = full.split("/")[-1]
+    headers = get_auth_headers(repo_name)
+    r = sess.get(f"{GITHUB}/repos/{full}/languages", headers=headers, timeout=TIMEOUT)
     return r.json() if r.status_code == 200 else {}
 
 
