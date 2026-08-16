@@ -176,11 +176,15 @@ def list_owner_repos(user: str) -> Dict[str, dict]:
         if name in keep:
             continue
         headers = get_auth_headers(name)
-        r = sess.get(f"{GITHUB}/repos/{user}/{name}", headers=headers, timeout=TIMEOUT)
+        url = f"{GITHUB}/repos/{user}/{name}"
+        r = sess.get(url, headers=headers, timeout=TIMEOUT)
+        print(f"[techstack] Fetching private repo {url} -> status code: {r.status_code}")
         if r.status_code == 200:
             repo = r.json()
             if not repo.get("fork") and not repo.get("archived") and not repo.get("disabled"):
                 keep[name] = repo
+        else:
+            print(f"[techstack] ERROR: Failed to fetch private repo {name}: {r.status_code} {r.text}")
     return keep
 
 
@@ -189,6 +193,7 @@ def get_file(full: str, path: str) -> Optional[str]:
     headers = get_auth_headers(repo_name)
     r = sess.get(f"{GITHUB}/repos/{full}/contents/{path}", headers=headers, timeout=15)
     if r.status_code != 200:
+        print(f"[techstack] WARNING: Failed to get file {path} for {full}: {r.status_code}")
         return None
     data = r.json()
     if isinstance(data, dict) and data.get("encoding") == "base64":
@@ -200,7 +205,10 @@ def get_languages(full: str) -> Dict[str, int]:
     repo_name = full.split("/")[-1]
     headers = get_auth_headers(repo_name)
     r = sess.get(f"{GITHUB}/repos/{full}/languages", headers=headers, timeout=TIMEOUT)
-    return r.json() if r.status_code == 200 else {}
+    if r.status_code != 200:
+        print(f"[techstack] WARNING: Failed to get languages for {full}: {r.status_code}")
+        return {}
+    return r.json()
 
 
 # ---------- Tech detection ----------
