@@ -49,6 +49,7 @@
 <!--TECH-PROJECTS:START-->
 | Project | Tech | Code mix |
 |---|---|---|
+| [Filmory-Web](https://github.com/James-Zeyu-Li/Filmory-Web) | Supabase (BaaS) · PostgreSQL · Dexie · React · TypeScript · Vite | - |
 | [VisionRAG-Platform](https://github.com/James-Zeyu-Li/VisionRAG-Platform) | Kubernetes · Helm · Grafana · Prometheus · PostgreSQL · Redis · RabbitMQ · React | Go 52.4% █████░░░░░ / Python 21.4% ██░░░░░░░░ |
 | [High-Concurrency-CQRS-Ticketing-Platform](https://github.com/James-Zeyu-Li/High-Concurrency-CQRS-Ticketing-Platform) | Kafka · Redis · MySQL · AWS · Java · Spring Boot | Java 76.3% ████████░░ / Shell 17.3% ██░░░░░░░░ |
 | [Ticketing-Cloud-Deployment](https://github.com/James-Zeyu-Li/Ticketing-Cloud-Deployment) | VPC · CloudWatch · ECS · NAT Gateway · SNS · SQS · ElastiCache · Aurora · AWS · Terraform | Java 44.2% ████░░░░░░ / Terraform (HCL) 37.1% ████░░░░░░ |
