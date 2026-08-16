@@ -126,9 +126,9 @@ BASE_HEAD = {
     "User-Agent": f"{USER}-tech-agg"
 }
 
-def get_auth_headers(repo_name: str = "") -> dict:
+def get_auth_headers(repo_name: str = "", use_fallback: bool = False) -> dict:
     headers = BASE_HEAD.copy()
-    token = FILMORY_TOKEN if (repo_name == "Filmory-Web" and FILMORY_TOKEN) else GLOBAL_TOKEN
+    token = FILMORY_TOKEN if (repo_name == "Filmory-Web" and FILMORY_TOKEN and not use_fallback) else GLOBAL_TOKEN
     if token:
         headers["Authorization"] = f"Bearer {token}"
     return headers
@@ -179,6 +179,11 @@ def list_owner_repos(user: str) -> Dict[str, dict]:
         url = f"{GITHUB}/repos/{user}/{name}"
         r = sess.get(url, headers=headers, timeout=TIMEOUT)
         print(f"[techstack] Fetching private repo {url} -> status code: {r.status_code}")
+        if r.status_code in (401, 403, 404):
+            print(f"[techstack] Auth failed (status {r.status_code}) for private repo {name}. Retrying with global token.")
+            headers = get_auth_headers(name, use_fallback=True)
+            r = sess.get(url, headers=headers, timeout=TIMEOUT)
+            print(f"[techstack] Retry private repo {url} -> status code: {r.status_code}")
         if r.status_code == 200:
             repo = r.json()
             if not repo.get("fork") and not repo.get("archived") and not repo.get("disabled"):
@@ -192,6 +197,10 @@ def get_file(full: str, path: str) -> Optional[str]:
     repo_name = full.split("/")[-1]
     headers = get_auth_headers(repo_name)
     r = sess.get(f"{GITHUB}/repos/{full}/contents/{path}", headers=headers, timeout=15)
+    if r.status_code in (401, 403, 404):
+        print(f"[techstack] Auth failed (status {r.status_code}) for file {path} of {full}. Retrying with global token.")
+        headers = get_auth_headers(repo_name, use_fallback=True)
+        r = sess.get(f"{GITHUB}/repos/{full}/contents/{path}", headers=headers, timeout=15)
     if r.status_code != 200:
         print(f"[techstack] WARNING: Failed to get file {path} for {full}: {r.status_code}")
         return None
@@ -205,6 +214,10 @@ def get_languages(full: str) -> Dict[str, int]:
     repo_name = full.split("/")[-1]
     headers = get_auth_headers(repo_name)
     r = sess.get(f"{GITHUB}/repos/{full}/languages", headers=headers, timeout=TIMEOUT)
+    if r.status_code in (401, 403, 404):
+        print(f"[techstack] Auth failed (status {r.status_code}) for languages of {full}. Retrying with global token.")
+        headers = get_auth_headers(repo_name, use_fallback=True)
+        r = sess.get(f"{GITHUB}/repos/{full}/languages", headers=headers, timeout=TIMEOUT)
     if r.status_code != 200:
         print(f"[techstack] WARNING: Failed to get languages for {full}: {r.status_code}")
         return {}
